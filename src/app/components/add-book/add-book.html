@@ -1,0 +1,60 @@
+<div class="form-container">
+    <div class="card form-card">
+        <div class="form-header">
+            <h2>{{ isEditMode ? 'Edit Book' : 'Add New Book' }}</h2>
+            <p class="subtitle">{{ isEditMode ? 'Modify the details of your book below.' : 'Enter the details below to
+                expand the library collection.' }}</p>
+        </div>
+
+        <form (submit)="saveBook()" class="smart-form">
+            <div class="form-group">
+                <label for="title">Book Title</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📖</span>
+                    <input id="title" [(ngModel)]="book.title" name="title" placeholder="e.g. The Great Gatsby" required
+                        #title="ngModel">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input id="author" [(ngModel)]="book.author" name="author"
+                            placeholder="e.g. F. Scott Fitzgerald" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🏷️</span>
+                        <select id="category" [(ngModel)]="book.category" name="category" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Programming">Programming</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="History">History</option>
+                            <option value="Science">Science</option>
+                            <option value="Biography">Biography</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label class="toggle">
+                    <input type="checkbox" [(ngModel)]="book.available" name="available">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Mark as available for immediate borrowing</span>
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="primary full-width">
+                    <span>{{ isEditMode ? '💾' : '➕' }}</span> {{ isEditMode ? 'Save Changes' : 'Confirm & Add Book' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,170 @@
+.page-header {
+    margin-bottom: 2.5rem;
+}
+
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.25rem;
+    align-items: center;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-muted);
+}
+
+.search-box input {
+    padding-left: 2.75rem;
+    width: 100%;
+}
+
+.category-filter select {
+    width: 200px;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.book-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.category-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.card-body {
+    padding: 1.5rem;
+    flex: 1;
+}
+
+.book-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.author-label {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+}
+
+.author-name {
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.card-footer {
+    padding: 1rem;
+    background: var(--background);
+    border-top: 1px solid var(--border);
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.flex-grow {
+    flex: 1;
+}
+
+button.outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+button.outline:hover {
+    background: var(--surface);
+    border-color: var(--text-muted);
+}
+
+.available-btn {
+    background: #166534 !important;
+    color: white !important;
+}
+
+.available-btn:hover {
+    background: #15803d !important;
+}
+
+.checked-out-btn {
+    background: #92400e !important;
+    color: white !important;
+}
+
+.checked-out-btn:hover {
+    background: #b45309 !important;
+}
+
+.danger-btn {
+    background: #fee2e2;
+    color: var(--danger);
+    padding: 0.75rem;
+    width: auto;
+}
+
+.danger-btn:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+    .filter-bar {
+        flex-direction: column;
+    }
+
+    .category-filter select {
+        width: 100%;
+    }
+}
