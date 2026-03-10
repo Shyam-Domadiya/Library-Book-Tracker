@@ -1,0 +1,57 @@
+<div class="login-container">
+    <div class="card login-card">
+        <div class="login-header">
+            <div class="logo-circle">📚</div>
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Please enter your details to continue to LibTracker.</p>
+        </div>
+
+        <form (submit)="onLogin()" class="smart-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input id="username" [(ngModel)]="username" name="username" placeholder="Enter your username"
+                        required (input)="errorMessage = ''">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="••••••••"
+                        required (input)="errorMessage = ''">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>I am a...</label>
+                <div class="role-selector">
+                    <label class="role-option" [class.active]="selectedRole === 'Student'">
+                        <input type="radio" name="role" value="Student" [(ngModel)]="selectedRole">
+                        <span class="role-icon">🎓</span>
+                        <span class="role-text">Student</span>
+                    </label>
+                    <label class="role-option" [class.active]="selectedRole === 'Librarian'">
+                        <input type="radio" name="role" value="Librarian" [(ngModel)]="selectedRole">
+                        <span class="role-icon">🔑</span>
+                        <span class="role-text">Librarian</span>
+                    </label>
+                </div>
+            </div>
+
+            <div *ngIf="errorMessage" class="error-text">
+                {{errorMessage}}
+            </div>
+
+            <button type="submit" class="primary full-width mt-medium" [disabled]="!username || !password">
+                Login to Library 🚀
+            </button>
+
+            <div class="login-footer mt-medium">
+                <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+            </div>
+        </form>
+    </div>
+</div>
