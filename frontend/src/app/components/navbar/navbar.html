@@ -1,0 +1,25 @@
+<nav *ngIf="auth.isAuthenticated()" class="navbar">
+    <div class="nav-container">
+        <div class="nav-logo" routerLink="/home">
+            <span class="logo-icon">📚</span>
+            <span class="logo-text">LibTracker</span>
+        </div>
+
+        <div class="nav-links">
+            <a routerLink="/home" routerLinkActive="active">Home</a>
+            <a routerLink="/books" routerLinkActive="active">Books</a>
+            <a *ngIf="auth.isLibrarian()" routerLink="/add-book" routerLinkActive="active">Add Book</a>
+            <a routerLink="/about" routerLinkActive="active">About</a>
+        </div>
+
+        <div class="user-account">
+            <div class="user-info">
+                <span class="user-name">{{auth.currentUser()?.name}}</span>
+                <span class="user-role badge">{{auth.currentUser()?.role}}</span>
+            </div>
+            <button (click)="logout()" class="logout-btn" title="Logout">
+                <span>🚪</span>
+            </button>
+        </div>
+    </div>
+</nav>

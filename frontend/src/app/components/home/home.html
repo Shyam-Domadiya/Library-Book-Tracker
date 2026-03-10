@@ -1,0 +1,76 @@
+<div class="dashboard">
+    <header class="home-header">
+        <h1>Welcome, {{auth.currentUser()?.name}}</h1>
+        <p class="subtitle">You are logged in as a <strong>{{auth.currentUser()?.role}}</strong>.</p>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon books">📚</div>
+            <div class="stat-info">
+                <span class="stat-label">Total Books</span>
+                <span class="stat-value">{{totalBooks}}</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon available">✅</div>
+            <div class="stat-info">
+                <span class="stat-label">Available</span>
+                <span class="stat-value text-success">{{availableBooks}}</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon checked">⏳</div>
+            <div class="stat-info">
+                <span class="stat-label">Checked Out</span>
+                <span class="stat-value text-warning">{{checkedOutBooks}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-section card mt-large">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <button routerLink="/books" class="primary">
+                <span>📖</span> Browse Collection
+            </button>
+            <button *ngIf="auth.isLibrarian()" routerLink="/add-book" class="outline">
+                <span>➕</span> Add New Book
+            </button>
+        </div>
+    </div>
+
+    <!-- Librarian Only: Recent Transactions -->
+    <div *ngIf="auth.isLibrarian() && transactions.length > 0" class="transaction-section card mt-large">
+        <div class="section-header">
+            <h3>Recent Activity</h3>
+            <span class="view-all">Latest 5 events</span>
+        </div>
+        <div class="table-responsive">
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Student</th>
+                        <th>Action</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tx of transactions">
+                        <td><strong>{{tx.bookTitle}}</strong></td>
+                        <td>{{tx.studentName}}</td>
+                        <td>
+                            <span class="tx-badge" [ngClass]="tx.type === 'ISSUE' ? 'tx-issue' : 'tx-return'">
+                                {{tx.type}}
+                            </span>
+                        </td>
+                        <td>{{tx.date | date:'MMM d, h:mm a'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

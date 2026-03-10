@@ -1,0 +1,64 @@
+<div class="page-header">
+    <div class="header-main">
+        <div>
+            <h2>Our Collection</h2>
+            <p class="subtitle">Explore and manage your library books.</p>
+        </div>
+        <button *ngIf="auth.isLibrarian()" routerLink="/add-book" class="primary">
+            <span>➕</span> Add Book
+        </button>
+    </div>
+
+    <div class="filter-bar card">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Search by title or author...">
+        </div>
+        <div class="category-filter">
+            <select [(ngModel)]="selectedCategory">
+                <option value="">All Categories</option>
+                <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="book-grid">
+    <div *ngFor="let book of filteredBooks" class="book-card card">
+        <div class="card-header">
+            <span class="category-tag">{{book.category | uppercase}}</span>
+            <span class="badge" [ngClass]="book.available ? 'badge-success' : 'badge-warning'">
+                {{book.available ? 'Available' : 'Checked Out'}}
+            </span>
+        </div>
+
+        <div class="card-body">
+            <h3 class="book-title">{{book.title | titlecase}}</h3>
+            <p class="author-label">by <span class="author-name">{{book.author}}</span></p>
+        </div>
+
+        <div class="card-footer">
+            <div class="button-group">
+                <button [routerLink]="['/book', book.id]" class="outline flex-grow" title="View Details">
+                    <span>👁️</span> Details
+                </button>
+                <button (click)="toggleStatus(book.id)" [ngClass]="book.available ? 'checked-out-btn' : 'available-btn'"
+                    class="flex-grow" [title]="book.available ? 'Mark as Borrowed' : 'Mark as Returned'">
+                    <span>{{book.available ? '📤' : '📥'}}</span> {{book.available ? 'Borrow' : 'Return'}}
+                </button>
+                <button *ngIf="auth.isLibrarian()" (click)="deleteBook(book.id)" class="danger-btn" title="Delete Book">
+                    <span>🗑️</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="filteredBooks.length === 0" class="empty-state card">
+    <div class="empty-icon">📂</div>
+    <h3>No books found</h3>
+    <p *ngIf="searchTerm || selectedCategory">Try adjusting your search or filters.</p>
+    <p *ngIf="!searchTerm && !selectedCategory">Start by adding some books to your collection.</p>
+    <button *ngIf="!searchTerm && !selectedCategory && auth.isLibrarian()" routerLink="/add-book" class="primary">Add
+        Your First Book</button>
+</div>

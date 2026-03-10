@@ -1,0 +1,171 @@
+.details-header {
+    margin-bottom: 2rem;
+}
+
+.text-button {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 0;
+    font-size: 0.9375rem;
+}
+
+.text-button:hover {
+    color: var(--primary);
+    background: transparent;
+}
+
+.details-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.details-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+}
+
+.book-visual {
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.book-cover-placeholder {
+    width: 200px;
+    height: 300px;
+    background: var(--surface);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+
+.book-content {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.top-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.category-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.book-title {
+    font-size: 2.5rem;
+    margin: 0.5rem 0;
+}
+
+.author-info {
+    font-size: 1.125rem;
+    color: var(--text-muted);
+}
+
+.author-name {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.details-body {
+    margin: 2rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.info-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.info-value {
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.details-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+button.outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+button.outline:hover {
+    background: var(--background);
+}
+
+.borrower-info {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    background: var(--background);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    border: 1px dashed var(--border);
+}
+
+.issue-action-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+
+.student-select {
+    flex-grow: 1;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 0.9375rem;
+    color: var(--text-main);
+}
+
+.student-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+@media (max-width: 900px) {
+    .details-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .book-visual {
+        padding: 2rem;
+    }
+
+    .book-content {
+        padding: 2rem;
+    }
+}
