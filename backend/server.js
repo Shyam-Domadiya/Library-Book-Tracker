@@ -98,7 +98,7 @@ app.post('/api/transactions/issue', async (req, res) => {
 
 app.post('/api/transactions/return', async (req, res) => {
     try {
-        const { bookId } = req.body;
+        const { bookId, userId, role } = req.body;
 
         const bookIdNum = Number(bookId);
         const book = await Book.findOne({
@@ -113,6 +113,10 @@ app.post('/api/transactions/return', async (req, res) => {
 
         if (book.available) {
             return res.status(400).json({ error: 'Book is already in the library' });
+        }
+
+        if (role !== 'Librarian' && String(book.borrowerId) !== String(userId)) {
+            return res.status(403).json({ error: 'You can only return books you have borrowed' });
         }
 
         const studentId = book.borrowerId;
@@ -137,6 +141,48 @@ app.post('/api/transactions/return', async (req, res) => {
         res.json({ message: 'Book returned successfully', book });
     } catch (err) {
         res.status(500).json({ error: 'Failed to return book' });
+    }
+});
+
+app.post('/api/books/:id/wishlist', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const id = req.params.id;
+        const idNum = Number(id);
+
+        const book = await Book.findOne({
+            $or: [
+                { id: isNaN(idNum) ? -1 : idNum },
+                ...(mongoose.Types.ObjectId.isValid(id) ? [{ _id: id }] : [])
+            ]
+        });
+
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+
+        if (String(book.borrowerId) === String(userId)) {
+            return res.status(400).json({ error: 'You are already borrowing this book' });
+        }
+
+        const wishlist = book.wishlist || [];
+        const index = wishlist.findIndex(id => String(id) === String(userId));
+        
+        let message = '';
+        if (index > -1) {
+            wishlist.splice(index, 1);
+            message = 'Removed from wishlist';
+        } else {
+            wishlist.push(userId);
+            message = 'Added to wishlist';
+        }
+        
+        book.wishlist = wishlist;
+        await book.save();
+
+        res.json({ message, book });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update wishlist' });
     }
 });
 

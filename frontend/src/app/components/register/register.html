@@ -1,37 +1,24 @@
 <div class="login-container">
     <div class="card login-card">
         <div class="login-header">
-            <div class="logo-circle">🎓</div>
+            <div class="logo-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg></div>
             <h2>Create Account</h2>
             <p class="subtitle">Join the LibTracker community today.</p>
         </div>
 
         <form (submit)="onRegister()" class="smart-form">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <div class="input-wrapper">
-                    <span class="input-icon">👤</span>
-                    <input id="name" [(ngModel)]="name" name="name" placeholder="e.g. John Doe" required
-                        (input)="errorMessage = ''">
-                </div>
-            </div>
+
 
             <div class="form-group">
                 <label for="username">Username</label>
-                <div class="input-wrapper">
-                    <span class="input-icon">🆔</span>
-                    <input id="username" [(ngModel)]="username" name="username" placeholder="Use for login" required
-                        (input)="errorMessage = ''">
-                </div>
+                <input id="username" [(ngModel)]="username" name="username" placeholder="Use for login" required
+                    (input)="errorMessage = ''">
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <div class="input-wrapper">
-                    <span class="input-icon">🔒</span>
-                    <input id="password" type="password" [(ngModel)]="password" name="password"
-                        placeholder="Min 4 characters" required (input)="errorMessage = ''">
-                </div>
+                <input id="password" type="password" [(ngModel)]="password" name="password"
+                    placeholder="Min 4 characters" required (input)="errorMessage = ''">
             </div>
 
             <div class="form-group">
@@ -39,12 +26,12 @@
                 <div class="role-selector">
                     <label class="role-option" [class.active]="selectedRole === 'Student'">
                         <input type="radio" name="role" value="Student" [(ngModel)]="selectedRole">
-                        <span class="role-icon">📚</span>
+                        <span class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg></span>
                         <span class="role-text">Student</span>
                     </label>
                     <label class="role-option" [class.active]="selectedRole === 'Librarian'">
                         <input type="radio" name="role" value="Librarian" [(ngModel)]="selectedRole">
-                        <span class="role-icon">🔑</span>
+                        <span class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></span>
                         <span class="role-text">Librarian</span>
                     </label>
                 </div>
@@ -54,8 +41,8 @@
                 {{errorMessage}}
             </div>
 
-            <button type="submit" class="primary full-width mt-medium" [disabled]="!name || !username || !password">
-                Sign Up & Start Tracking 🚀
+            <button type="submit" class="primary full-width mt-medium" [disabled]="!username || !password">
+                Sign Up & Start Tracking <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em" style="vertical-align: middle; margin-left: 4px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
 
             <div class="login-footer mt-medium">

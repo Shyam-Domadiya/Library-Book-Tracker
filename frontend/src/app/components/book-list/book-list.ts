@@ -34,14 +34,39 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  toggleStatus(id: number) {
-    this.bookService.updateBookStatus(id);
+  toggleStatus(book: Book) {
+    const currentUser = this.auth.currentUser();
+    if (currentUser) {
+      if (book.available) {
+        if (!this.auth.isLibrarian()) {
+          this.bookService.issueBook(book._id || book.id, currentUser.id).subscribe({
+            error: (err) => alert('Failed to borrow book: ' + (err.error?.error || err.message))
+          });
+        } else {
+          // Librarians can't quick-issue from list because they need to select a student
+          alert('Please view Book Details to issue a book to a specific student.');
+        }
+      } else {
+        this.bookService.returnBook(book._id || book.id, currentUser.id, currentUser.role).subscribe({
+          error: (err) => alert('Failed to return book: ' + (err.error?.error || err.message))
+        });
+      }
+    }
   }
 
   deleteBook(id: number | string) {
     if (confirm('Are you sure you want to delete this book?')) {
       this.bookService.deleteBook(id).subscribe({
         error: (err) => alert('Failed to delete book: ' + (err.error?.error || err.message))
+      });
+    }
+  }
+
+  toggleWishlist(book: Book) {
+    const currentUser = this.auth.currentUser();
+    if (currentUser) {
+      this.bookService.toggleWishlist(book._id || book.id, currentUser.id).subscribe({
+        error: (err) => alert('Failed to update wishlist: ' + (err.error?.error || err.message))
       });
     }
   }
