@@ -14,18 +14,18 @@ import { Transaction } from '../../models/transaction';
 })
 export class Home implements OnInit {
   auth = inject(AuthService);
-  totalBooks = 0;
-  availableBooks = 0;
-  checkedOutBooks = 0;
+  bookService = inject(BookService);
+
+  // Reactive computed signals from the service — auto-update when books are fetched
+  totalBooks = this.bookService.totalBooks;
+  availableBooks = this.bookService.availableBooks;
+  checkedOutBooks = this.bookService.checkedOutBooks;
+
   transactions: Transaction[] = [];
 
-  constructor(private bookService: BookService) { }
-
   ngOnInit() {
-    const books = this.bookService.getBooks();
-    this.totalBooks = books.length;
-    this.availableBooks = books.filter(b => b.available).length;
-    this.checkedOutBooks = this.totalBooks - this.availableBooks;
+    // Refresh books (signal updates automatically via service computed signals)
+    this.bookService.refreshBooks().subscribe();
 
     if (this.auth.isLibrarian()) {
       this.bookService.getTransactions().subscribe(txs => {

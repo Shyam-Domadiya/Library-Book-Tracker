@@ -14,7 +14,7 @@ import { Book } from '../../models/book';
 })
 export class AddBook implements OnInit {
   isEditMode = false;
-  bookId: number | null = null;
+  bookId: string | null = null;
 
   book: Book = {
     id: 0,
@@ -34,7 +34,7 @@ export class AddBook implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.isEditMode = true;
-      this.bookId = Number(idParam);
+      this.bookId = idParam;
       this.bookService.getBookById(this.bookId).subscribe(book => {
         if (book) {
           this.book = { ...book };
@@ -46,14 +46,23 @@ export class AddBook implements OnInit {
   }
 
   saveBook() {
-    if (this.isEditMode) {
-      this.bookService.addBook(this.book);
-      alert('Book updated successfully');
+    if (this.isEditMode && this.bookId !== null) {
+      this.bookService.updateBook(this.bookId, this.book).subscribe({
+        next: () => {
+          alert('Book updated successfully');
+          this.router.navigate(['/books']);
+        },
+        error: (err) => alert('Failed to update book: ' + (err.error?.error || err.message))
+      });
     } else {
       this.book.id = Date.now();
-      this.bookService.addBook(this.book);
-      alert('Book added successfully');
+      this.bookService.addBook(this.book).subscribe({
+        next: () => {
+          alert('Book added successfully');
+          this.router.navigate(['/books']);
+        },
+        error: (err) => alert('Failed to add book: ' + (err.error?.error || err.message))
+      });
     }
-    this.router.navigate(['/books']);
   }
 }

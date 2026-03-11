@@ -1,7 +1,7 @@
 import {
   Title
-} from "./chunk-TTY26ZW6.js";
-import "./chunk-UBHTW7N6.js";
+} from "./chunk-U3LUO2MW.js";
+import "./chunk-SVUUY5O5.js";
 import {
   HashLocationStrategy,
   Location,
@@ -11,16 +11,15 @@ import {
   PathLocationStrategy,
   PlatformNavigation,
   ViewportScroller
-} from "./chunk-UMH5CA4H.js";
+} from "./chunk-DYLC3XSD.js";
 import {
   LOCATION_INITIALIZED,
   PlatformLocation
-} from "./chunk-BOAW43PR.js";
+} from "./chunk-Z6HOFCN5.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
   Attribute,
-  BehaviorSubject,
   ChangeDetectorRef,
   Compiler,
   Component,
@@ -29,10 +28,8 @@ import {
   DOCUMENT,
   DestroyRef,
   Directive,
-  EMPTY,
   ENVIRONMENT_INITIALIZER,
   ElementRef,
-  EmptyError,
   EnvironmentInjector,
   EventEmitter,
   HostAttributeToken,
@@ -46,47 +43,27 @@ import {
   NgModule,
   NgModuleFactory$1,
   NgZone,
-  Observable,
   Output,
   PendingTasksInternal,
   Renderer2,
   RuntimeError,
-  Subject,
-  Subscription,
   Version,
   ViewContainerRef,
-  __spreadProps,
-  __spreadValues,
   afterNextRender,
   booleanAttribute,
-  catchError,
-  combineLatest,
   computed,
-  concat,
-  concatMap,
   createEnvironmentInjector,
-  defer,
   effect,
-  filter,
-  finalize,
-  first,
   formatRuntimeError,
-  from,
   inject,
   input,
   isInjectable,
   isNgModule,
-  isObservable,
   isPromise,
   isStandalone,
   linkedSignal,
   makeEnvironmentProviders,
-  map,
-  mergeAll,
-  mergeMap,
-  of,
   performanceMarkFeature,
-  pipe,
   promiseWithResolvers,
   provideAppInitializer,
   provideEnvironmentInitializer,
@@ -95,13 +72,6 @@ import {
   runInInjectionContext,
   setClassMetadata,
   signal,
-  startWith,
-  switchMap,
-  take,
-  takeLast,
-  takeUntil,
-  tap,
-  throwError,
   untracked,
   ɵɵNgOnChangesFeature,
   ɵɵattribute,
@@ -121,7 +91,39 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-VGE7NVCD.js";
+} from "./chunk-J64AMDHM.js";
+import {
+  BehaviorSubject,
+  EMPTY,
+  EmptyError,
+  Observable,
+  Subject,
+  Subscription,
+  __spreadProps,
+  __spreadValues,
+  catchError,
+  combineLatest,
+  concat,
+  concatMap,
+  defer,
+  filter,
+  finalize,
+  first,
+  from,
+  isObservable,
+  map,
+  mergeAll,
+  mergeMap,
+  of,
+  pipe,
+  startWith,
+  switchMap,
+  take,
+  takeLast,
+  takeUntil,
+  tap,
+  throwError
+} from "./chunk-PJVWDKLX.js";
 
 // node_modules/@angular/router/fesm2022/_router-chunk.mjs
 var PRIMARY_OUTLET = "primary";
