@@ -3,9 +3,11 @@ import { Home } from './components/home/home';
 import { BookListComponent } from './components/book-list/book-list';
 import { AddBook } from './components/add-book/add-book';
 import { BookDetails } from './components/book-details/book-details';
-import { About } from './components/about/about';
+
 import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
+import { WishlistComponent } from './components/wishlist/wishlist';
+import { HistoryComponent } from './components/history/history';
 import { authGuard } from './guards/auth';
 
 export const routes: Routes = [
@@ -26,6 +28,12 @@ export const routes: Routes = [
         data: { role: 'Librarian' }
     },
     { path: 'book/:id', component: BookDetails, canActivate: [authGuard] },
-    { path: 'about', component: About, canActivate: [authGuard] },
+    { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard] },
+    {
+        path: 'history',
+        component: HistoryComponent,
+        canActivate: [authGuard],
+        data: { role: 'Librarian' }
+    },
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];

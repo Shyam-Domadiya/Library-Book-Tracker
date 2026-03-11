@@ -1,11 +1,11 @@
-<div class="details-container">
+<div class="details-container animate-fade-in-up">
     <header class="details-header">
-        <button routerLink="/books" class="text-button">
+        <button routerLink="/books" class="text-button hover-lift">
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em" style="vertical-align: middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg></span> Back to Collection
         </button>
     </header>
 
-    <div *ngIf="book()" class="card details-card">
+    <div *ngIf="book()" class="card details-card glass">
         <div class="details-layout">
             <div class="book-visual">
                 <div class="book-cover-placeholder">
@@ -14,7 +14,7 @@
             </div>
 
             <div class="book-content">
-                <div class="top-meta">
+                <div class="top-meta stagger-1">
                     <span class="category-tag">{{book()!.category | uppercase}}</span>
                     <span class="badge" [ngClass]="book()!.available ? 'badge-success' : 'badge-warning'">
                         {{book()!.available ? 'Available' : 'Checked Out'}}
@@ -24,14 +24,16 @@
                     </span>
                 </div>
 
-                <h1 class="book-title">{{book()!.title | titlecase}}</h1>
-                <p class="author-info">by <span class="author-name">{{book()!.author}}</span></p>
+                <div class="stagger-2">
+                    <h1 class="book-title text-gradient">{{book()!.title | titlecase}}</h1>
+                    <p class="author-info">by <span class="author-name">{{book()!.author}}</span></p>
+                </div>
 
-                <div class="details-body">
+                <div class="details-body stagger-3">
                     <div class="info-section">
                         <h3>Description</h3>
-                        <p>This is a featured book in our collection. You can find more information about this title in
-                            our library archives.</p>
+                        <p class="text-muted">This is a featured book in our collection. You can find more information about this title in
+                            our library archives. Discover the story and explore the world hidden inside its pages.</p>
                     </div>
 
                     <div class="info-grid">
@@ -46,7 +48,7 @@
                     </div>
                 </div>
 
-                <div class="details-actions">
+                <div class="details-actions stagger-4">
                     <!-- Librarian Actions: Smart Issue -->
                     <div *ngIf="auth.isLibrarian() && book()!.available" class="issue-action-group">
                         <select [(ngModel)]="selectedStudentId" class="student-select">
@@ -99,11 +101,11 @@
         </div>
     </div>
 
-    <div *ngIf="!book()" class="empty-state card">
-        <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></div>
+    <div *ngIf="!book()" class="empty-state card mt-large animate-fade-in">
+        <div class="empty-icon text-gradient"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="2em" height="2em"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></div>
         <h3>Book not found</h3>
-        <p>The book you're looking for doesn't exist or has been removed.</p>
-        <button routerLink="/books" class="primary">Back to Collection</button>
+        <p class="text-muted">The book you're looking for doesn't exist or has been removed.</p>
+        <button routerLink="/books" class="primary mt-medium">Back to Collection</button>
     </div>
 
 </div>
