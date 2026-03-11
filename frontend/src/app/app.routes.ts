@@ -9,10 +9,11 @@ import { RegisterComponent } from './components/register/register';
 import { WishlistComponent } from './components/wishlist/wishlist';
 import { HistoryComponent } from './components/history/history';
 import { authGuard } from './guards/auth';
+import { guestGuard } from './guards/guest';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
+    { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
+    { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
     { path: 'home', component: Home, canActivate: [authGuard] },
     { path: 'books', component: BookListComponent, canActivate: [authGuard] },
     {
