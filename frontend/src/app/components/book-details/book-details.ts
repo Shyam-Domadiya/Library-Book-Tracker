@@ -60,15 +60,23 @@ export class BookDetails implements OnInit {
 
   toggleStatus() {
     const currentBook = this.book();
-    if (currentBook) {
+    const currentUser = this.auth.currentUser();
+    if (currentBook && currentUser) {
       if (currentBook.available) {
-        this.bookService.updateBook(currentBook._id || currentBook.id, { ...currentBook, available: false }).subscribe({
-          next: () => this.book.set({ ...currentBook, available: false }),
-          error: (err) => alert('Failed to update status: ' + (err.error?.error || err.message))
-        });
+        if (!this.auth.isLibrarian()) {
+          this.bookService.issueBook(currentBook._id || currentBook.id, currentUser.id).subscribe({
+            next: () => this.book.set({ ...currentBook, available: false, borrowerName: currentUser.name, borrowerId: currentUser.id }),
+            error: (err) => alert('Failed to borrow book: ' + (err.error?.error || err.message))
+          });
+        } else {
+          this.bookService.updateBook(currentBook._id || currentBook.id, { ...currentBook, available: false }).subscribe({
+            next: () => this.book.set({ ...currentBook, available: false }),
+            error: (err) => alert('Failed to update status: ' + (err.error?.error || err.message))
+          });
+        }
       } else {
-        this.bookService.returnBook(currentBook._id || currentBook.id).subscribe({
-          next: () => this.book.set({ ...currentBook, available: true, borrowerName: undefined }),
+        this.bookService.returnBook(currentBook._id || currentBook.id, currentUser.id, currentUser.role).subscribe({
+          next: () => this.book.set({ ...currentBook, available: true, borrowerName: undefined, borrowerId: undefined }),
           error: (err) => alert('Failed to return book: ' + (err.error?.error || err.message))
         });
       }

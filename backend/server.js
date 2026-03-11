@@ -98,7 +98,7 @@ app.post('/api/transactions/issue', async (req, res) => {
 
 app.post('/api/transactions/return', async (req, res) => {
     try {
-        const { bookId } = req.body;
+        const { bookId, userId, role } = req.body;
 
         const bookIdNum = Number(bookId);
         const book = await Book.findOne({
@@ -113,6 +113,10 @@ app.post('/api/transactions/return', async (req, res) => {
 
         if (book.available) {
             return res.status(400).json({ error: 'Book is already in the library' });
+        }
+
+        if (role !== 'Librarian' && String(book.borrowerId) !== String(userId)) {
+            return res.status(403).json({ error: 'You can only return books you have borrowed' });
         }
 
         const studentId = book.borrowerId;

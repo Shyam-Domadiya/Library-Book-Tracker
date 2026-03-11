@@ -85,8 +85,9 @@ export class BookService {
     );
   }
 
-  returnBook(bookId: number | string): Observable<any> {
-    return this.http.post(`http://localhost:5000/api/transactions/return`, { bookId }).pipe(
+  returnBook(bookId: number | string, userId?: string, role?: string): Observable<any> {
+    const payload = userId && role ? { bookId, userId, role } : { bookId };
+    return this.http.post(`http://localhost:5000/api/transactions/return`, payload).pipe(
       tap(() => this.refreshBooks().subscribe()),
       catchError(err => {
         console.error('Failed to return book:', err);

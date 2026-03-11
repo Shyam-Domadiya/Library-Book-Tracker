@@ -67,11 +67,17 @@
                     </button>
 
                     <!-- Student Action: Simple Borrow/Return (Fallback) -->
-                    <button *ngIf="!auth.isLibrarian()" (click)="toggleStatus()"
-                        [ngClass]="book()!.available ? 'checked-out-btn' : 'available-btn'">
-                        <span>{{book()!.available ? '📤' : '📥'}}</span> {{book()!.available ? 'Borrow This Book' :
-                        'Return This Book'}}
-                    </button>
+                    <ng-container *ngIf="!auth.isLibrarian()">
+                        <button *ngIf="book()!.available" (click)="toggleStatus()" class="checked-out-btn">
+                            <span>📤</span> Borrow This Book
+                        </button>
+                        <button *ngIf="!book()!.available && book()!.borrowerId === auth.currentUser()?.id" (click)="toggleStatus()" class="available-btn">
+                            <span>📥</span> Return This Book
+                        </button>
+                        <button *ngIf="!book()!.available && book()!.borrowerId !== auth.currentUser()?.id" disabled class="available-btn" style="opacity: 0.5; cursor: not-allowed;">
+                            <span>🔒</span> Checked Out
+                        </button>
+                    </ng-container>
 
                     <button *ngIf="auth.isLibrarian()" [routerLink]="['/edit-book', book()!._id]" class="outline">
                         <span>✏️</span> Edit Details

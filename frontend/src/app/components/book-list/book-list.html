@@ -42,10 +42,28 @@
                 <button [routerLink]="['/book', book._id]" class="outline flex-grow" title="View Details">
                     <span>👁️</span> Details
                 </button>
-                <button (click)="toggleStatus(book.id)" [ngClass]="book.available ? 'checked-out-btn' : 'available-btn'"
-                    class="flex-grow" [title]="book.available ? 'Mark as Borrowed' : 'Mark as Returned'">
-                    <span>{{book.available ? '📤' : '📥'}}</span> {{book.available ? 'Borrow' : 'Return'}}
-                </button>
+                <!-- If Librarian -->
+                <ng-container *ngIf="auth.isLibrarian()">
+                    <button *ngIf="book.available" (click)="toggleStatus(book)" class="checked-out-btn flex-grow" title="Issue Book">
+                        <span>📤</span> Issue
+                    </button>
+                    <button *ngIf="!book.available" (click)="toggleStatus(book)" class="available-btn flex-grow" title="Mark as Returned">
+                        <span>📥</span> Return
+                    </button>
+                </ng-container>
+
+                <!-- If Student -->
+                <ng-container *ngIf="!auth.isLibrarian()">
+                    <button *ngIf="book.available" (click)="toggleStatus(book)" class="checked-out-btn flex-grow" title="Borrow Book">
+                        <span>📤</span> Borrow
+                    </button>
+                    <button *ngIf="!book.available && book.borrowerId === auth.currentUser()?.id" (click)="toggleStatus(book)" class="available-btn flex-grow" title="Return Book">
+                        <span>📥</span> Return
+                    </button>
+                    <button *ngIf="!book.available && book.borrowerId !== auth.currentUser()?.id" disabled class="available-btn flex-grow" style="opacity: 0.5; cursor: not-allowed;" title="Checked Out">
+                        <span>🔒</span> Checked Out
+                    </button>
+                </ng-container>
                 <button *ngIf="auth.isLibrarian()" (click)="deleteBook(book._id || book.id)" class="danger-btn"
                     title="Delete Book">
                     <span>🗑️</span>
