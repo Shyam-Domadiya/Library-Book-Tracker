@@ -39,14 +39,15 @@
 
         <div class="card-footer">
             <div class="button-group">
-                <button [routerLink]="['/book', book.id]" class="outline flex-grow" title="View Details">
+                <button [routerLink]="['/book', book._id]" class="outline flex-grow" title="View Details">
                     <span>👁️</span> Details
                 </button>
                 <button (click)="toggleStatus(book.id)" [ngClass]="book.available ? 'checked-out-btn' : 'available-btn'"
                     class="flex-grow" [title]="book.available ? 'Mark as Borrowed' : 'Mark as Returned'">
                     <span>{{book.available ? '📤' : '📥'}}</span> {{book.available ? 'Borrow' : 'Return'}}
                 </button>
-                <button *ngIf="auth.isLibrarian()" (click)="deleteBook(book.id)" class="danger-btn" title="Delete Book">
+                <button *ngIf="auth.isLibrarian()" (click)="deleteBook(book._id || book.id)" class="danger-btn"
+                    title="Delete Book">
                     <span>🗑️</span>
                 </button>
             </div>

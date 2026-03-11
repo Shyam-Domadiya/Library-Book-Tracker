@@ -2,8 +2,7 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../models/book';
 import { Transaction } from '../models/transaction';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Observable } from 'rxjs';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,62 +14,103 @@ export class BookService {
   // Using a signal for the books list
   private booksSignal = signal<Book[]>([]);
 
-  constructor() {
-    this.refreshBooks();
-  }
+  // Computed signals – components bind to these directly
+  readonly totalBooks = computed(() => this.booksSignal().length);
+  readonly availableBooks = computed(() => this.booksSignal().filter(b => b.available).length);
+  readonly checkedOutBooks = computed(() => this.totalBooks() - this.availableBooks());
+
+  constructor() { }
 
   getBooks() {
     return this.booksSignal();
   }
 
-  refreshBooks() {
-    this.http.get<Book[]>(this.apiUrl).subscribe(books => {
-      this.booksSignal.set(books);
-    });
+  refreshBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>(this.apiUrl).pipe(
+      tap(books => this.booksSignal.set(books)),
+      catchError(err => {
+        console.error('Failed to fetch books:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
-  getBookById(id: number) {
+  getBookById(id: number | string) {
     return this.http.get<Book>(`${this.apiUrl}/${id}`);
   }
 
-  addBook(book: Book) {
-    this.http.post<Book>(this.apiUrl, book).subscribe(() => {
-      this.refreshBooks();
-    });
+  addBook(book: Book): Observable<Book> {
+    return this.http.post<Book>(this.apiUrl, book).pipe(
+      tap(() => this.refreshBooks().subscribe()),
+      catchError(err => {
+        console.error('Failed to add book:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  updateBook(id: number | string, data: Partial<Book>): Observable<Book> {
+    return this.http.put<Book>(`${this.apiUrl}/${id}`, data).pipe(
+      tap(() => this.refreshBooks().subscribe()),
+      catchError(err => {
+        console.error('Failed to update book:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
   updateBookStatus(id: number) {
     const book = this.getBooks().find(b => b.id === id);
     if (book) {
-      this.http.put(`${this.apiUrl}/${id}`, { ...book, available: !book.available }).subscribe(() => {
-        this.refreshBooks();
-      });
+      this.updateBook(id, { ...book, available: !book.available }).subscribe();
     }
   }
 
   getStudents(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:5000/api/users/students');
+    return this.http.get<any[]>('http://localhost:5000/api/users/students').pipe(
+      catchError(err => {
+        console.error('Failed to fetch students:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
-  issueBook(bookId: number, studentId: string) {
-    this.http.post(`${this.apiUrl.replace('/books', '/transactions/issue')}`, { bookId, studentId }).subscribe(() => {
-      this.refreshBooks();
-    });
+  issueBook(bookId: number | string, studentId: string): Observable<any> {
+    return this.http.post(`http://localhost:5000/api/transactions/issue`, { bookId, studentId }).pipe(
+      tap(() => this.refreshBooks().subscribe()),
+      catchError(err => {
+        console.error('Failed to issue book:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
-  returnBook(bookId: number) {
-    this.http.post(`${this.apiUrl.replace('/books', '/transactions/return')}`, { bookId }).subscribe(() => {
-      this.refreshBooks();
-    });
+  returnBook(bookId: number | string): Observable<any> {
+    return this.http.post(`http://localhost:5000/api/transactions/return`, { bookId }).pipe(
+      tap(() => this.refreshBooks().subscribe()),
+      catchError(err => {
+        console.error('Failed to return book:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
   getTransactions(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(this.apiUrl.replace('/books', '/transactions'));
+    return this.http.get<Transaction[]>('http://localhost:5000/api/transactions').pipe(
+      catchError(err => {
+        console.error('Failed to fetch transactions:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
-  deleteBook(id: number) {
-    this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
-      this.refreshBooks();
-    });
+  deleteBook(id: number | string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => this.refreshBooks().subscribe()),
+      catchError(err => {
+        console.error('Failed to delete book:', err);
+        return throwError(() => err);
+      })
+    );
   }
 }

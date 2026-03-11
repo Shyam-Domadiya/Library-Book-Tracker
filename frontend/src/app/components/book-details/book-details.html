@@ -5,7 +5,7 @@
         </button>
     </header>
 
-    <div *ngIf="book" class="card details-card">
+    <div *ngIf="book()" class="card details-card">
         <div class="details-layout">
             <div class="book-visual">
                 <div class="book-cover-placeholder">
@@ -15,17 +15,17 @@
 
             <div class="book-content">
                 <div class="top-meta">
-                    <span class="category-tag">{{book.category | uppercase}}</span>
-                    <span class="badge" [ngClass]="book.available ? 'badge-success' : 'badge-warning'">
-                        {{book.available ? 'Available' : 'Checked Out'}}
+                    <span class="category-tag">{{book()!.category | uppercase}}</span>
+                    <span class="badge" [ngClass]="book()!.available ? 'badge-success' : 'badge-warning'">
+                        {{book()!.available ? 'Available' : 'Checked Out'}}
                     </span>
-                    <span *ngIf="!book.available && book.borrowerName" class="borrower-info">
-                        by <strong>{{book.borrowerName}}</strong>
+                    <span *ngIf="!book()!.available && book()!.borrowerName" class="borrower-info">
+                        by <strong>{{book()!.borrowerName}}</strong>
                     </span>
                 </div>
 
-                <h1 class="book-title">{{book.title | titlecase}}</h1>
-                <p class="author-info">by <span class="author-name">{{book.author}}</span></p>
+                <h1 class="book-title">{{book()!.title | titlecase}}</h1>
+                <p class="author-info">by <span class="author-name">{{book()!.author}}</span></p>
 
                 <div class="details-body">
                     <div class="info-section">
@@ -37,7 +37,7 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">Book ID</span>
-                            <span class="info-value">#{{book.id}}</span>
+                            <span class="info-value">#{{book()!.id}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Format</span>
@@ -48,10 +48,10 @@
 
                 <div class="details-actions">
                     <!-- Librarian Actions: Smart Issue -->
-                    <div *ngIf="auth.isLibrarian() && book.available" class="issue-action-group">
+                    <div *ngIf="auth.isLibrarian() && book()!.available" class="issue-action-group">
                         <select [(ngModel)]="selectedStudentId" class="student-select">
                             <option value="" disabled selected>Select Student to Issue</option>
-                            <option *ngFor="let student of students" [value]="student._id">
+                            <option *ngFor="let student of students()" [value]="student._id">
                                 {{student.name}} ({{student.username}})
                             </option>
                         </select>
@@ -61,19 +61,19 @@
                     </div>
 
                     <!-- Librarian Actions: Smart Return -->
-                    <button *ngIf="auth.isLibrarian() && !book.available" (click)="toggleStatus()"
+                    <button *ngIf="auth.isLibrarian() && !book()!.available" (click)="toggleStatus()"
                         class="available-btn">
                         <span>📥</span> Mark as Returned
                     </button>
 
                     <!-- Student Action: Simple Borrow/Return (Fallback) -->
                     <button *ngIf="!auth.isLibrarian()" (click)="toggleStatus()"
-                        [ngClass]="book.available ? 'checked-out-btn' : 'available-btn'">
-                        <span>{{book.available ? '📤' : '📥'}}</span> {{book.available ? 'Borrow This Book' : 'Return
-                        This Book'}}
+                        [ngClass]="book()!.available ? 'checked-out-btn' : 'available-btn'">
+                        <span>{{book()!.available ? '📤' : '📥'}}</span> {{book()!.available ? 'Borrow This Book' :
+                        'Return This Book'}}
                     </button>
 
-                    <button *ngIf="auth.isLibrarian()" [routerLink]="['/edit-book', book.id]" class="outline">
+                    <button *ngIf="auth.isLibrarian()" [routerLink]="['/edit-book', book()!._id]" class="outline">
                         <span>✏️</span> Edit Details
                     </button>
                     <button *ngIf="auth.isLibrarian()" (click)="deleteBook()" class="outline danger-text">
@@ -84,10 +84,11 @@
         </div>
     </div>
 
-    <div *ngIf="!book" class="empty-state card">
+    <div *ngIf="!book()" class="empty-state card">
         <div class="empty-icon">❌</div>
         <h3>Book not found</h3>
         <p>The book you're looking for doesn't exist or has been removed.</p>
         <button routerLink="/books" class="primary">Back to Collection</button>
     </div>
+
 </div>

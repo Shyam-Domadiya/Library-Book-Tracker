@@ -22,7 +22,7 @@ export class BookListComponent implements OnInit {
   constructor(private bookService: BookService) { }
 
   ngOnInit() {
-    // Service handles loading initial data via constructor
+    this.bookService.refreshBooks().subscribe();
   }
 
   get filteredBooks(): Book[] {
@@ -38,9 +38,11 @@ export class BookListComponent implements OnInit {
     this.bookService.updateBookStatus(id);
   }
 
-  deleteBook(id: number) {
+  deleteBook(id: number | string) {
     if (confirm('Are you sure you want to delete this book?')) {
-      this.bookService.deleteBook(id);
+      this.bookService.deleteBook(id).subscribe({
+        error: (err) => alert('Failed to delete book: ' + (err.error?.error || err.message))
+      });
     }
   }
 }
