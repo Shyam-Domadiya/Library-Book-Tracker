@@ -1,11 +1,11 @@
-<div class="dashboard">
+<div class="dashboard animate-fade-in-up">
     <header class="home-header">
-        <h1>Welcome, {{auth.currentUser()?.name}}</h1>
-        <p class="subtitle">You are logged in as a <strong>{{auth.currentUser()?.role}}</strong>.</p>
+        <h1 class="text-gradient">Welcome, {{auth.currentUser()?.name}}</h1>
+        <p class="subtitle">You are logged in as a <strong class="badge badge-primary">{{auth.currentUser()?.role}}</strong></p>
     </header>
 
-    <div class="stats-grid">
-        <div class="stat-card">
+    <div class="stats-grid stagger-1">
+        <div class="stat-card glass-card">
             <div class="stat-icon books"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg></div>
             <div class="stat-info">
                 <span class="stat-label">Total Books</span>
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card glass-card">
             <div class="stat-icon available"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div>
             <div class="stat-info">
                 <span class="stat-label">Available</span>
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card glass-card">
             <div class="stat-icon checked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
             <div class="stat-info">
                 <span class="stat-label">Checked Out</span>
@@ -30,47 +30,17 @@
         </div>
     </div>
 
-    <div class="action-section card mt-large">
+    <div class="action-section card mt-large stagger-2">
         <h3>Quick Actions</h3>
+        <p class="text-muted mb-4">Jump right into managing your library.</p>
         <div class="action-buttons">
             <button routerLink="/books" class="primary">
                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em" style="vertical-align: middle; margin-right: 4px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg></span> Browse Collection
             </button>
-            <button *ngIf="auth.isLibrarian()" routerLink="/add-book" class="outline">
+            <button *ngIf="auth.isLibrarian()" routerLink="/add-book" class="secondary">
                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em" style="vertical-align: middle; margin-right: 4px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg></span> Add New Book
             </button>
         </div>
     </div>
 
-    <!-- Librarian Only: Recent Transactions -->
-    <div *ngIf="auth.isLibrarian() && transactions.length > 0" class="transaction-section card mt-large">
-        <div class="section-header">
-            <h3>Recent Activity</h3>
-            <span class="view-all">Latest 5 events</span>
-        </div>
-        <div class="table-responsive">
-            <table class="transaction-table">
-                <thead>
-                    <tr>
-                        <th>Book</th>
-                        <th>Student</th>
-                        <th>Action</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let tx of transactions">
-                        <td><strong>{{tx.bookTitle}}</strong></td>
-                        <td>{{tx.studentName}}</td>
-                        <td>
-                            <span class="tx-badge" [ngClass]="tx.type === 'ISSUE' ? 'tx-issue' : 'tx-return'">
-                                {{tx.type}}
-                            </span>
-                        </td>
-                        <td>{{tx.date | date:'MMM d, h:mm a'}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>

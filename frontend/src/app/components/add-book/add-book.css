@@ -1,21 +1,23 @@
 .form-container {
     max-width: 650px;
     margin: 0 auto;
+    padding: 2rem 0;
 }
 
 .form-card {
-    padding: 2.5rem;
+    padding: 3rem;
+    position: relative;
 }
 
 .form-header {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     text-align: center;
 }
 
 .smart-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.75rem;
 }
 
 .form-row {
@@ -31,9 +33,11 @@
 }
 
 .form-group label {
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .input-wrapper {
@@ -44,30 +48,89 @@
 
 .input-icon {
     position: absolute;
-    left: 1rem;
-    font-size: 1.125rem;
+    left: 1.25rem;
+    font-size: 1.25rem;
+    color: var(--text-muted);
     pointer-events: none;
+    transition: var(--transition);
+}
+
+.input-wrapper input:focus + .input-icon,
+.input-wrapper input:not(:placeholder-shown) + .input-icon,
+.input-wrapper select:focus + .input-icon,
+.input-wrapper select:not(:invalid) + .input-icon {
+    color: var(--primary);
 }
 
 .input-wrapper input,
 .input-wrapper select {
-    padding-left: 3rem;
+    padding-left: 3.5rem;
 }
 
+.custom-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 1.25rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.text-main {
+    color: var(--text-main);
+}
+
+/* Custom Checkbox Toggle */
 .toggle {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.toggle input {
+    display: none;
+}
+
+.toggle-slider {
+    width: 24px;
+    height: 24px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.check-icon {
+    color: white;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: var(--transition-bounce);
+}
+
+.toggle input:checked + .toggle-slider {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.toggle input:checked + .toggle-slider .check-icon {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .toggle-label {
-    font-size: 0.9375rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .form-actions {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 }
 
 @media (max-width: 600px) {

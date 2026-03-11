@@ -1,0 +1,42 @@
+<div class="page-header animate-fade-in-up">
+    <div class="header-main">
+        <div>
+            <h2 class="text-gradient">My Wishlist</h2>
+            <p class="subtitle">Books you're waiting for to become available.</p>
+        </div>
+    </div>
+</div>
+
+<div class="book-grid">
+    <div *ngFor="let book of wishlistBooks(); let i = index" class="book-card card stagger-{{(i % 5) + 1}}">
+        <div class="card-header">
+            <span class="category-tag">{{book.category | uppercase}}</span>
+            <span class="badge" [ngClass]="book.available ? 'badge-success' : 'badge-warning'">
+                {{book.available ? 'Available Now!' : 'Checked Out'}}
+            </span>
+        </div>
+
+        <div class="card-body">
+            <h3 class="book-title">{{book.title | titlecase}}</h3>
+            <p class="author-label">by <span class="author-name">{{book.author}}</span></p>
+        </div>
+
+        <div class="card-footer">
+            <div class="button-group">
+                <button [routerLink]="['/book', book._id]" class="primary flex-grow" title="View Details">
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em" style="vertical-align: middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg></span> Details
+                </button>
+                <button (click)="removeFromWishlist(book)" class="outline danger-text flex-grow" title="Remove from Wishlist">
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em" style="vertical-align: middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></span> Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="wishlistBooks().length === 0" class="empty-state glass-card mt-large animate-fade-in-up">
+    <div class="empty-icon text-gradient"><svg viewBox="0 0 24 24" fill="currentColor" width="2em" height="2em"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg></div>
+    <h3>Your Wishlist is Empty</h3>
+    <p class="text-muted">You haven't added any books to your wishlist yet.</p>
+    <button routerLink="/books" class="primary mt-medium">Browse Collection</button>
+</div>

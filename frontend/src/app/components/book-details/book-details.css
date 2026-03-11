@@ -2,16 +2,11 @@
     margin-bottom: 2rem;
 }
 
-.text-button {
-    background: transparent;
-    color: var(--text-muted);
-    padding: 0;
-    font-size: 0.9375rem;
+.hover-lift {
+    transition: var(--transition-bounce);
 }
-
-.text-button:hover {
-    color: var(--primary);
-    background: transparent;
+.hover-lift:hover {
+    transform: translateY(-2px);
 }
 
 .details-card {
@@ -22,57 +17,69 @@
 .details-layout {
     display: grid;
     grid-template-columns: 350px 1fr;
+    min-height: 500px;
 }
 
 .book-visual {
-    background: var(--primary-light);
+    background: linear-gradient(135deg, var(--primary-light), var(--surface));
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
+    padding: 4rem 3rem;
+    border-right: 1px solid var(--border-light);
 }
 
 .book-cover-placeholder {
-    width: 200px;
-    height: 300px;
-    background: var(--surface);
-    border-radius: 8px;
-    box-shadow: var(--shadow-lg);
+    width: 220px;
+    height: 330px;
+    background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+    border-radius: var(--radius);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
+    font-size: 5rem;
+    color: white;
+    transform: perspective(800px) rotateY(-5deg);
+    transition: var(--transition-bounce);
+}
+
+.book-visual:hover .book-cover-placeholder {
+    transform: perspective(800px) rotateY(0deg) scale(1.05);
 }
 
 .book-content {
     padding: 3rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
 .top-meta {
     display: flex;
     gap: 1rem;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .category-tag {
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: 0.8rem;
+    font-weight: 800;
     color: var(--primary);
     background: var(--primary-light);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.05em;
 }
 
 .book-title {
-    font-size: 2.5rem;
-    margin: 0.5rem 0;
+    font-size: 3rem;
+    margin: 0.5rem 0 0 0;
+    line-height: 1.1;
 }
 
 .author-info {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     color: var(--text-muted);
 }
 
@@ -83,7 +90,7 @@
 
 .details-body {
     margin: 2rem 0;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -97,42 +104,42 @@
     gap: 1.5rem;
 }
 
+.info-item {
+    background: var(--background);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+}
+
 .info-label {
     display: block;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
 }
 
 .info-value {
-    font-weight: 500;
+    font-size: 1.1rem;
+    font-weight: 600;
     color: var(--text-main);
 }
 
 .details-actions {
     display: flex;
     gap: 1rem;
-}
-
-button.outline {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-main);
-}
-
-button.outline:hover {
-    background: var(--background);
+    flex-wrap: wrap;
 }
 
 .borrower-info {
     font-size: 0.875rem;
-    color: var(--text-muted);
-    background: var(--background);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    border: 1px dashed var(--border);
+    color: var(--text-main);
+    background: var(--warning-light);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-pill);
+    border: 1px dashed rgba(245, 158, 11, 0.4);
 }
 
 .issue-action-group {
@@ -143,17 +150,7 @@ button.outline:hover {
 
 .student-select {
     flex-grow: 1;
-    padding: 0.625rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    font-size: 0.9375rem;
-    color: var(--text-main);
-}
-
-.student-select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
+    border-radius: var(--radius-pill) !important;
 }
 
 @media (max-width: 900px) {
@@ -162,10 +159,16 @@ button.outline:hover {
     }
 
     .book-visual {
-        padding: 2rem;
+        padding: 3rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
     }
 
     .book-content {
         padding: 2rem;
+    }
+    
+    .book-title {
+        font-size: 2.25rem;
     }
 }

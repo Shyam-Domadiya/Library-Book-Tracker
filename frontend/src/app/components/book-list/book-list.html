@@ -1,7 +1,7 @@
-<div class="page-header">
+<div class="page-header animate-fade-in-up">
     <div class="header-main">
         <div>
-            <h2>Our Collection</h2>
+            <h2 class="text-gradient">Our Collection</h2>
             <p class="subtitle">Explore and manage your library books.</p>
         </div>
         <button *ngIf="auth.isLibrarian()" routerLink="/add-book" class="primary">
@@ -9,13 +9,13 @@
         </button>
     </div>
 
-    <div class="filter-bar card">
+    <div class="filter-bar glass-card">
         <div class="search-box">
             <span class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></span>
-            <input type="text" [(ngModel)]="searchTerm" placeholder="Search by title or author...">
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Search by title or author..." class="pill-input">
         </div>
         <div class="category-filter">
-            <select [(ngModel)]="selectedCategory">
+            <select [(ngModel)]="selectedCategory" class="pill-input">
                 <option value="">All Categories</option>
                 <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
             </select>
@@ -24,7 +24,7 @@
 </div>
 
 <div class="book-grid">
-    <div *ngFor="let book of filteredBooks" class="book-card card">
+    <div *ngFor="let book of filteredBooks; let i = index" class="book-card card stagger-{{(i % 5) + 1}}">
         <div class="card-header">
             <span class="category-tag">{{book.category | uppercase}}</span>
             <span class="badge" [ngClass]="book.available ? 'badge-success' : 'badge-warning'">
@@ -82,11 +82,11 @@
     </div>
 </div>
 
-<div *ngIf="filteredBooks.length === 0" class="empty-state card">
-    <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg></div>
+<div *ngIf="filteredBooks.length === 0" class="empty-state glass-card mt-large animate-fade-in-up">
+    <div class="empty-icon text-gradient"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="2em" height="2em"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg></div>
     <h3>No books found</h3>
-    <p *ngIf="searchTerm || selectedCategory">Try adjusting your search or filters.</p>
-    <p *ngIf="!searchTerm && !selectedCategory">Start by adding some books to your collection.</p>
+    <p class="text-muted" *ngIf="searchTerm || selectedCategory">Try adjusting your search or filters.</p>
+    <p class="text-muted" *ngIf="!searchTerm && !selectedCategory">Start by adding some books to your collection.</p>
     <button *ngIf="!searchTerm && !selectedCategory && auth.isLibrarian()" routerLink="/add-book" class="primary">Add
         Your First Book</button>
 </div>

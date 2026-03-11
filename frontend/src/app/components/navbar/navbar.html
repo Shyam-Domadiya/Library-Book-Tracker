@@ -1,21 +1,24 @@
-<nav *ngIf="auth.isAuthenticated()" class="navbar">
-    <div class="nav-container">
-        <div class="nav-logo" routerLink="/home">
-            <span class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg></span>
-            <span class="logo-text">LibTracker</span>
+<nav *ngIf="auth.isAuthenticated()" class="navbar glass">
+    <div class="nav-container animate-fade-in">
+        <div class="nav-logo hover-lift" routerLink="/home">
+            <div class="logo-icon-wrapper">
+                <span class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg></span>
+            </div>
+            <span class="logo-text text-gradient">LibTracker</span>
         </div>
 
         <div class="nav-links">
-            <a routerLink="/home" routerLinkActive="active">Home</a>
-            <a routerLink="/books" routerLinkActive="active">Books</a>
-            <a *ngIf="auth.isLibrarian()" routerLink="/add-book" routerLinkActive="active">Add Book</a>
-            <a routerLink="/about" routerLinkActive="active">About</a>
+            <a routerLink="/home" routerLinkActive="active" class="hover-underline">Home</a>
+            <a routerLink="/books" routerLinkActive="active" class="hover-underline">Books</a>
+            <a *ngIf="auth.isLibrarian()" routerLink="/add-book" routerLinkActive="active" class="hover-underline">Add Book</a>
+            <a *ngIf="auth.isLibrarian()" routerLink="/history" routerLinkActive="active" class="hover-underline">History</a>
+            <a *ngIf="!auth.isLibrarian()" routerLink="/wishlist" routerLinkActive="active" class="hover-underline">Wishlist</a>
         </div>
 
         <div class="user-account">
             <div class="user-info">
                 <span class="user-name">{{auth.currentUser()?.name}}</span>
-                <span class="user-role badge">{{auth.currentUser()?.role}}</span>
+                <span class="user-role badge badge-primary">{{auth.currentUser()?.role}}</span>
             </div>
             <button (click)="logout()" class="logout-btn" title="Logout">
                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg></span>

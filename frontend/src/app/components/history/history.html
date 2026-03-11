@@ -1,0 +1,49 @@
+<div class="card history-card glass-card animate-fade-in stagger-1">
+    <div class="header-main">
+        <div class="header-content">
+            <h2 class="text-main">Recent Activity</h2>
+            <span class="badge badge-primary rounded-pill">LATEST 5 EVENTS</span>
+        </div>
+    </div>
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading history records...</p>
+    </div>
+
+    <div *ngIf="error" class="empty-state">
+        <h3>Error</h3>
+        <p class="text-muted">{{error}}</p>
+    </div>
+
+    <div *ngIf="!loading && transactions.length === 0" class="empty-state">
+        <div class="empty-icon text-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="2em" height="2em"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+        <h3>No Activity Yet</h3>
+        <p class="text-muted">There are no recorded transactions in the library system.</p>
+    </div>
+
+    <div class="table-responsive" *ngIf="!loading && transactions.length > 0">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Student</th>
+                    <th>Action</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let record of transactions" class="hover-lift-row">
+                    <td class="book-title-cell font-weight-bold">{{record.bookTitle}}</td>
+                    <td>{{record.studentName}}</td>
+                    <td>
+                        <span class="badge" [ngClass]="record.type === 'ISSUE' ? 'badge-primary' : 'badge-success'" style="border-radius: 20px; padding: 0.4em 1em;">
+                            {{record.type}}
+                        </span>
+                    </td>
+                    <td class="date-cell">
+                        <span class="date">{{record.createdAt | date:'MMM d, h:mm a'}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

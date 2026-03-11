@@ -6,6 +6,7 @@
 .subtitle {
     color: var(--text-muted);
     font-size: 1.125rem;
+    margin-top: 0.5rem;
 }
 
 .stats-grid {
@@ -16,79 +17,75 @@
 }
 
 .stat-card {
-    background: var(--surface);
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    padding: 1.75rem;
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    border: 1px solid var(--border);
 }
 
 .stat-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.5), var(--shadow-sm);
 }
 
 .stat-icon.books {
-    background: var(--primary-light);
+    background: linear-gradient(135deg, var(--primary-light), #c7d2fe);
+    color: var(--primary-hover);
 }
 
 .stat-icon.available {
-    background: #dcfce7;
+    background: linear-gradient(135deg, var(--success-light), #a7f3d0);
+    color: #065f46;
 }
 
 .stat-icon.checked {
-    background: #fef3c7;
+    background: linear-gradient(135deg, var(--warning-light), #fde68a);
+    color: #78350f;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
 }
 
 .stat-label {
-    display: block;
     color: var(--text-muted);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
 }
 
 .stat-value {
-    display: block;
-    font-size: 1.75rem;
+    font-size: 2.25rem;
     font-weight: 800;
     color: var(--text-main);
+    line-height: 1.1;
+    font-family: 'Outfit', sans-serif;
 }
 
-.text-success {
-    color: #166534;
-}
-
-.text-warning {
-    color: #92400e;
-}
+.text-success { color: var(--success); }
+.text-warning { color: #d97706; }
 
 .action-buttons {
     display: flex;
     gap: 1rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
 }
+
+.mb-4 { margin-bottom: 1rem; }
+.text-muted { color: var(--text-muted); }
 
 .mt-large {
     margin-top: 3rem;
-}
-
-button.outline {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-main);
-}
-
-button.outline:hover {
-    background: var(--background);
-    border-color: var(--text-muted);
 }
 
 .section-header {
@@ -96,11 +93,12 @@ button.outline:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
 }
 
-.view-all {
-    font-size: 0.875rem;
-    color: var(--text-muted);
+.section-header h3 {
+    margin: 0;
 }
 
 .table-responsive {
@@ -109,24 +107,31 @@ button.outline:hover {
 
 .transaction-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     text-align: left;
 }
 
 .transaction-table th {
-    padding: 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 1rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border-bottom: 2px solid var(--border);
+    background: var(--background);
 }
 
 .transaction-table td {
-    padding: 1.25rem 1rem;
+    padding: 1.25rem;
     border-bottom: 1px solid var(--border);
-    font-size: 0.9375rem;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+}
+
+.transaction-table tr:hover td {
+    background: var(--primary-light);
 }
 
 .transaction-table tr:last-child td {
@@ -134,18 +139,23 @@ button.outline:hover {
 }
 
 .tx-badge {
-    padding: 0.25rem 0.625rem;
-    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-pill);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
+    display: inline-flex;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .tx-issue {
-    background: #eff6ff;
-    color: #1e40af;
+    background: var(--primary-light);
+    color: var(--primary-hover);
+    border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
 .tx-return {
-    background: #f0fdf4;
-    color: #166534;
+    background: var(--success-light);
+    color: #065f46;
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
