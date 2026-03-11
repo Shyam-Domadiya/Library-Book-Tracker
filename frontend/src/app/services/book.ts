@@ -96,6 +96,16 @@ export class BookService {
     );
   }
 
+  toggleWishlist(bookId: number | string, userId: string): Observable<any> {
+    return this.http.post(`http://localhost:5000/api/books/${bookId}/wishlist`, { userId }).pipe(
+      tap(() => this.refreshBooks().subscribe()),
+      catchError(err => {
+        console.error('Failed to update wishlist:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
   getTransactions(): Observable<Transaction[]> {
     return this.http.get<Transaction[]>('http://localhost:5000/api/transactions').pipe(
       catchError(err => {

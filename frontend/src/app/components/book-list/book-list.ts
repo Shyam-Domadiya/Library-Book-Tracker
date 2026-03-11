@@ -61,4 +61,13 @@ export class BookListComponent implements OnInit {
       });
     }
   }
+
+  toggleWishlist(book: Book) {
+    const currentUser = this.auth.currentUser();
+    if (currentUser) {
+      this.bookService.toggleWishlist(book._id || book.id, currentUser.id).subscribe({
+        error: (err) => alert('Failed to update wishlist: ' + (err.error?.error || err.message))
+      });
+    }
+  }
 }

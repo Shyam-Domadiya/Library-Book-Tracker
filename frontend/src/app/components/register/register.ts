@@ -13,7 +13,7 @@ import { Role } from '../../models/user';
     styleUrl: '../login/login.css', // Reusing login styles
 })
 export class RegisterComponent {
-    name: string = '';
+
     username: string = '';
     password: string = '';
     selectedRole: Role = 'Student';
@@ -22,9 +22,9 @@ export class RegisterComponent {
     constructor(private authService: AuthService, private router: Router) { }
 
     onRegister() {
-        if (this.name && this.username && this.password) {
+        if (this.username && this.password) {
             this.authService.register({
-                name: this.name,
+                name: this.username, // using username as name since name was removed
                 username: this.username,
                 password: this.password,
                 role: this.selectedRole

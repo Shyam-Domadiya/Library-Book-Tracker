@@ -144,6 +144,48 @@ app.post('/api/transactions/return', async (req, res) => {
     }
 });
 
+app.post('/api/books/:id/wishlist', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const id = req.params.id;
+        const idNum = Number(id);
+
+        const book = await Book.findOne({
+            $or: [
+                { id: isNaN(idNum) ? -1 : idNum },
+                ...(mongoose.Types.ObjectId.isValid(id) ? [{ _id: id }] : [])
+            ]
+        });
+
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+
+        if (String(book.borrowerId) === String(userId)) {
+            return res.status(400).json({ error: 'You are already borrowing this book' });
+        }
+
+        const wishlist = book.wishlist || [];
+        const index = wishlist.findIndex(id => String(id) === String(userId));
+        
+        let message = '';
+        if (index > -1) {
+            wishlist.splice(index, 1);
+            message = 'Removed from wishlist';
+        } else {
+            wishlist.push(userId);
+            message = 'Added to wishlist';
+        }
+        
+        book.wishlist = wishlist;
+        await book.save();
+
+        res.json({ message, book });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update wishlist' });
+    }
+});
+
 app.get('/api/transactions', async (req, res) => {
     try {
         const transactions = await Transaction.find().sort({ createdAt: -1 });

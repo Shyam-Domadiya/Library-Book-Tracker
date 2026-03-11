@@ -7,31 +7,18 @@
         </div>
 
         <form (submit)="onRegister()" class="smart-form">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <div class="input-wrapper">
-                    <span class="input-icon">👤</span>
-                    <input id="name" [(ngModel)]="name" name="name" placeholder="e.g. John Doe" required
-                        (input)="errorMessage = ''">
-                </div>
-            </div>
+
 
             <div class="form-group">
                 <label for="username">Username</label>
-                <div class="input-wrapper">
-                    <span class="input-icon">🆔</span>
-                    <input id="username" [(ngModel)]="username" name="username" placeholder="Use for login" required
-                        (input)="errorMessage = ''">
-                </div>
+                <input id="username" [(ngModel)]="username" name="username" placeholder="Use for login" required
+                    (input)="errorMessage = ''">
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <div class="input-wrapper">
-                    <span class="input-icon">🔒</span>
-                    <input id="password" type="password" [(ngModel)]="password" name="password"
-                        placeholder="Min 4 characters" required (input)="errorMessage = ''">
-                </div>
+                <input id="password" type="password" [(ngModel)]="password" name="password"
+                    placeholder="Min 4 characters" required (input)="errorMessage = ''">
             </div>
 
             <div class="form-group">
@@ -54,7 +41,7 @@
                 {{errorMessage}}
             </div>
 
-            <button type="submit" class="primary full-width mt-medium" [disabled]="!name || !username || !password">
+            <button type="submit" class="primary full-width mt-medium" [disabled]="!username || !password">
                 Sign Up & Start Tracking 🚀
             </button>
 

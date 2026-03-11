@@ -60,9 +60,18 @@
                     <button *ngIf="!book.available && book.borrowerId === auth.currentUser()?.id" (click)="toggleStatus(book)" class="available-btn flex-grow" title="Return Book">
                         <span>📥</span> Return
                     </button>
-                    <button *ngIf="!book.available && book.borrowerId !== auth.currentUser()?.id" disabled class="available-btn flex-grow" style="opacity: 0.5; cursor: not-allowed;" title="Checked Out">
-                        <span>🔒</span> Checked Out
-                    </button>
+                    
+                    <!-- Wishlist actions for checked out books not borrowed by current user -->
+                    <ng-container *ngIf="!book.available && book.borrowerId !== auth.currentUser()?.id">
+                        <ng-container *ngIf="auth.currentUser()?.id as userId">
+                            <button *ngIf="!book.wishlist?.includes(userId)" (click)="toggleWishlist(book)" class="available-btn flex-grow" title="Join Wishlist">
+                                <span>⭐</span> Join Wishlist
+                            </button>
+                            <button *ngIf="book.wishlist?.includes(userId)" (click)="toggleWishlist(book)" class="outline flex-grow" title="Leave Wishlist">
+                                <span>🌟</span> On Wishlist
+                            </button>
+                        </ng-container>
+                    </ng-container>
                 </ng-container>
                 <button *ngIf="auth.isLibrarian()" (click)="deleteBook(book._id || book.id)" class="danger-btn"
                     title="Delete Book">

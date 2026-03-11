@@ -92,4 +92,18 @@ export class BookDetails implements OnInit {
       });
     }
   }
+
+  toggleWishlist() {
+    const currentBook = this.book();
+    const currentUser = this.auth.currentUser();
+    if (currentBook && currentUser) {
+      this.bookService.toggleWishlist(currentBook._id || currentBook.id, currentUser.id).subscribe({
+        next: (res) => {
+           // Update local book state with the new wishlist array
+           this.book.set(res.book);
+        },
+        error: (err) => alert('Failed to update wishlist: ' + (err.error?.error || err.message))
+      });
+    }
+  }
 }

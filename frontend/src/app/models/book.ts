@@ -7,4 +7,5 @@ export interface Book {
   available: boolean;
   borrowerId?: string;
   borrowerName?: string;
+  wishlist?: string[];
 }
