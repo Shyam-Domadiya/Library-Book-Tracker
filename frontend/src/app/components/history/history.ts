@@ -9,6 +9,7 @@ interface Transaction {
   studentId: string;
   studentName: string;
   type: 'ISSUE' | 'RETURN';
+  dueDate?: string;
   date: string;
   createdAt?: string;
 }

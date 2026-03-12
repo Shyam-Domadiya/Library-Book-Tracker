@@ -6,6 +6,7 @@ const transactionSchema = new mongoose.Schema({
     studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     studentName: { type: String, required: true },
     type: { type: String, enum: ['ISSUE', 'RETURN'], required: true },
+    dueDate: { type: Date },
     date: { type: Date, default: Date.now }
 }, { timestamps: true });
 

@@ -43,4 +43,32 @@
         </div>
     </div>
 
+    <!-- Overdue Books Section for Librarians -->
+    <div *ngIf="auth.isLibrarian() && overdueBooks.length > 0" class="card mt-large animate-fade-in-up stagger-3">
+        <div class="section-header">
+            <h3 class="text-danger flex items-center">
+                <span>⚠️</span> Overdue Items
+            </h3>
+            <span class="badge badge-danger">{{overdueBooks.length}} TOTAL</span>
+        </div>
+        <div class="table-responsive">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Borrower</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let book of overdueBooks" class="hover-danger-row">
+                        <td class="font-weight-bold">{{book.title}}</td>
+                        <td>{{book.borrowerName}}</td>
+                        <td class="text-danger font-weight-bold">{{book.dueDate | date:'mediumDate'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>

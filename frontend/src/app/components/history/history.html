@@ -27,6 +27,7 @@
                     <th>Book</th>
                     <th>Student</th>
                     <th>Action</th>
+                    <th>Due Date</th>
                     <th>Date</th>
                 </tr>
             </thead>
@@ -38,6 +39,10 @@
                         <span class="badge" [ngClass]="record.type === 'ISSUE' ? 'badge-primary' : 'badge-success'" style="border-radius: 20px; padding: 0.4em 1em;">
                             {{record.type}}
                         </span>
+                    </td>
+                    <td>
+                        <span *ngIf="record.dueDate" class="date">{{record.dueDate | date:'mediumDate'}}</span>
+                        <span *ngIf="!record.dueDate" class="text-muted">-</span>
                     </td>
                     <td class="date-cell">
                         <span class="date">{{record.createdAt | date:'MMM d, h:mm a'}}</span>

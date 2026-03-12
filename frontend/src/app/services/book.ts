@@ -25,8 +25,13 @@ export class BookService {
     return this.booksSignal();
   }
 
-  refreshBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl).pipe(
+  refreshBooks(filters?: { search?: string; category?: string; availability?: string }): Observable<Book[]> {
+    const params: Record<string, string> = {};
+    if (filters?.search) params['search'] = filters.search;
+    if (filters?.category) params['category'] = filters.category;
+    if (filters?.availability) params['availability'] = filters.availability;
+
+    return this.http.get<Book[]>(this.apiUrl, { params }).pipe(
       tap(books => this.booksSignal.set(books)),
       catchError(err => {
         console.error('Failed to fetch books:', err);
@@ -37,6 +42,15 @@ export class BookService {
 
   getBookById(id: number | string) {
     return this.http.get<Book>(`${this.apiUrl}/${id}`);
+  }
+
+  getOverdueBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/overdue`).pipe(
+      catchError(err => {
+        console.error('Failed to fetch overdue books:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
   addBook(book: Book): Observable<Book> {

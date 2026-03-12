@@ -12,12 +12,19 @@
     <div class="filter-bar glass-card">
         <div class="search-box">
             <span class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="1em" height="1em"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></span>
-            <input type="text" [(ngModel)]="searchTerm" placeholder="Search by title or author..." class="pill-input">
+            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="Search by title or author..." class="pill-input">
         </div>
         <div class="category-filter">
-            <select [(ngModel)]="selectedCategory" class="pill-input">
+            <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="pill-input">
                 <option value="">All Categories</option>
                 <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+            </select>
+        </div>
+        <div class="category-filter">
+            <select [(ngModel)]="selectedAvailability" (ngModelChange)="onFilterChange()" class="pill-input">
+                <option value="">All Status</option>
+                <option value="available">Available</option>
+                <option value="checkedout">Checked Out</option>
             </select>
         </div>
     </div>
@@ -35,6 +42,9 @@
         <div class="card-body">
             <h3 class="book-title">{{book.title | titlecase}}</h3>
             <p class="author-label">by <span class="author-name">{{book.author}}</span></p>
+            <p *ngIf="!book.available && book.dueDate" class="due-date-info">
+                <span class="due-label">Due:</span> {{book.dueDate | date:'mediumDate'}}
+            </p>
         </div>
 
         <div class="card-footer">

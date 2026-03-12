@@ -75,9 +75,13 @@ app.post('/api/transactions/issue', async (req, res) => {
         }
 
         // Update book status
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 14); // 14 days from now
+
         book.available = false;
         book.borrowerId = student._id;
         book.borrowerName = student.name;
+        book.dueDate = dueDate;
         await book.save();
 
         // Create transaction log
@@ -86,7 +90,8 @@ app.post('/api/transactions/issue', async (req, res) => {
             bookTitle: book.title,
             studentId: student._id,
             studentName: student.name,
-            type: 'ISSUE'
+            type: 'ISSUE',
+            dueDate: dueDate
         });
         await transaction.save();
 
@@ -126,6 +131,7 @@ app.post('/api/transactions/return', async (req, res) => {
         book.available = true;
         book.borrowerId = null;
         book.borrowerName = null;
+        book.dueDate = null;
         await book.save();
 
         // Create transaction log
@@ -167,7 +173,7 @@ app.post('/api/books/:id/wishlist', async (req, res) => {
 
         const wishlist = book.wishlist || [];
         const index = wishlist.findIndex(id => String(id) === String(userId));
-        
+
         let message = '';
         if (index > -1) {
             wishlist.splice(index, 1);
@@ -176,7 +182,7 @@ app.post('/api/books/:id/wishlist', async (req, res) => {
             wishlist.push(userId);
             message = 'Added to wishlist';
         }
-        
+
         book.wishlist = wishlist;
         await book.save();
 
@@ -223,6 +229,19 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // --- Books CRUD ---
+
+app.get('/api/books/overdue', async (req, res) => {
+    try {
+        const now = new Date();
+        const overdueBooks = await Book.find({
+            available: false,
+            dueDate: { $lte: now }
+        });
+        res.json(overdueBooks);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch overdue books' });
+    }
+});
 
 app.get('/api/books', async (req, res) => {
     const books = await Book.find();

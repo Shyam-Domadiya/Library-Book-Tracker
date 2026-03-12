@@ -1,15 +1,17 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { NgFor, NgIf, NgClass, TitleCasePipe, UpperCasePipe } from '@angular/common';
+import { NgFor, NgIf, NgClass, TitleCasePipe, UpperCasePipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book';
 import { AuthService } from '../../services/auth';
 import { Book } from '../../models/book';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [NgFor, NgIf, NgClass, RouterLink, TitleCasePipe, UpperCasePipe, FormsModule],
+  imports: [NgFor, NgIf, NgClass, RouterLink, TitleCasePipe, UpperCasePipe, DatePipe, FormsModule],
   templateUrl: './book-list.html',
   styleUrls: ['./book-list.css']
 })
@@ -17,21 +19,34 @@ export class BookListComponent implements OnInit {
   auth = inject(AuthService);
   searchTerm: string = '';
   selectedCategory: string = '';
+  selectedAvailability: string = '';
   categories: string[] = ['Programming', 'Fiction', 'History', 'Science', 'Biography'];
+  private searchSubject = new Subject<void>();
 
   constructor(private bookService: BookService) { }
 
   ngOnInit() {
-    this.bookService.refreshBooks().subscribe();
+    this.fetchBooks();
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => this.fetchBooks());
+  }
+
+  fetchBooks() {
+    this.bookService.refreshBooks({
+      search: this.searchTerm,
+      category: this.selectedCategory,
+      availability: this.selectedAvailability
+    }).subscribe();
+  }
+
+  onFilterChange() {
+    this.searchSubject.next();
   }
 
   get filteredBooks(): Book[] {
-    return this.bookService.getBooks().filter(book => {
-      const matchesSearch = book.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesCategory = this.selectedCategory === '' || book.category === this.selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
+    return this.bookService.getBooks();
   }
 
   toggleStatus(book: Book) {
@@ -43,7 +58,6 @@ export class BookListComponent implements OnInit {
             error: (err) => alert('Failed to borrow book: ' + (err.error?.error || err.message))
           });
         } else {
-          // Librarians can't quick-issue from list because they need to select a student
           alert('Please view Book Details to issue a book to a specific student.');
         }
       } else {
