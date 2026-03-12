@@ -110,6 +110,16 @@ export class BookService {
     );
   }
 
+  extendBook(bookId: number | string, userId: string, newDueDate?: string): Observable<any> {
+    return this.http.post(`http://localhost:5000/api/transactions/extend`, { bookId, userId, newDueDate }).pipe(
+      tap(() => this.refreshBooks().subscribe()),
+      catchError(err => {
+        console.error('Failed to extend book due date:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
   toggleWishlist(bookId: number | string, userId: string): Observable<any> {
     return this.http.post(`http://localhost:5000/api/books/${bookId}/wishlist`, { userId }).pipe(
       tap(() => this.refreshBooks().subscribe()),

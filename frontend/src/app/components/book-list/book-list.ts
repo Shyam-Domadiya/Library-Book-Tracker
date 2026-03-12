@@ -75,6 +75,67 @@ export class BookListComponent implements OnInit {
     }
   }
 
+  formatDateForInput(date: any): string {
+    if (!date) return '';
+    const d = new Date(date);
+    const month = '' + (d.getMonth() + 1);
+    const day = '' + d.getDate();
+    const year = d.getFullYear();
+    return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+  }
+
+  get todayDateString(): string {
+    return this.formatDateForInput(new Date());
+  }
+
+  updateDueDate(book: Book, event: any) {
+    const newDate = event.target.value;
+    const currentUser = this.auth.currentUser();
+    
+    if (currentUser && book.borrowerId === currentUser.id && newDate) {
+      const d = new Date(newDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      d.setHours(0, 0, 0, 0);
+      
+      if (d < today) {
+        alert("Cannot set due date in the past");
+        event.target.value = this.formatDateForInput(book.dueDate);
+        return;
+      }
+
+      this.bookService.extendBook(book._id || book.id, currentUser.id, newDate).subscribe({
+        error: (err) => {
+          alert('Failed to update due date: ' + (err.error?.error || err.message));
+          event.target.value = this.formatDateForInput(book.dueDate);
+        }
+      });
+    }
+  }
+
+  adjustDueDate(book: Book, days: number) {
+    const currentUser = this.auth.currentUser();
+    if (currentUser && book.borrowerId === currentUser.id && book.dueDate) {
+      const d = new Date(book.dueDate);
+      d.setDate(d.getDate() + days);
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const checkDate = new Date(d);
+      checkDate.setHours(0, 0, 0, 0);
+      
+      if (checkDate < today) {
+        alert("Cannot set due date in the past");
+        return;
+      }
+
+      const newDateStr = d.toISOString();
+      this.bookService.extendBook(book._id || book.id, currentUser.id, newDateStr).subscribe({
+        error: (err) => alert('Failed to update due date: ' + (err.error?.error || err.message))
+      });
+    }
+  }
+
   toggleWishlist(book: Book) {
     const currentUser = this.auth.currentUser();
     if (currentUser) {

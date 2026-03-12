@@ -45,6 +45,21 @@
                             <span class="info-label">Format</span>
                             <span class="info-value">Hardcover / Digital</span>
                         </div>
+                        <div class="info-item" *ngIf="!book()!.available && book()!.dueDate">
+                            <span class="info-label">Due Date</span>
+                            <span class="info-value">
+                                <ng-container *ngIf="book()!.borrowerId === auth.currentUser()?.id; else readOnlyDate">
+                                    <div class="due-date-editor">
+                                        <button class="icon-btn" (click)="adjustDueDate(-1)" title="Decrease 1 Day">-</button>
+                                        <input type="date" class="due-date-input" [min]="todayDateString" [value]="formatDateForInput(book()!.dueDate)" (change)="updateDueDate($event)">
+                                        <button class="icon-btn" (click)="adjustDueDate(1)" title="Increase 1 Day">+</button>
+                                    </div>
+                                </ng-container>
+                                <ng-template #readOnlyDate>
+                                    {{book()!.dueDate | date:'mediumDate'}}
+                                </ng-template>
+                            </span>
+                        </div>
                     </div>
                 </div>
 

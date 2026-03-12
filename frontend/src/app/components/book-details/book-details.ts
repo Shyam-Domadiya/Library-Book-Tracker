@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgIf, NgFor, NgClass, TitleCasePipe, UpperCasePipe } from '@angular/common';
+import { NgIf, NgFor, NgClass, TitleCasePipe, UpperCasePipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book';
 import { AuthService } from '../../services/auth';
@@ -9,7 +9,7 @@ import { Book } from '../../models/book';
 @Component({
   selector: 'app-book-details',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, TitleCasePipe, UpperCasePipe, RouterLink, FormsModule],
+  imports: [NgIf, NgFor, NgClass, TitleCasePipe, UpperCasePipe, RouterLink, FormsModule, DatePipe],
   templateUrl: './book-details.html',
   styleUrls: ['./book-details.css']
 })
@@ -89,6 +89,72 @@ export class BookDetails implements OnInit {
       this.bookService.deleteBook(currentBook._id || currentBook.id).subscribe({
         next: () => this.router.navigate(['/books']),
         error: (err) => alert('Failed to delete book: ' + (err.error?.error || err.message))
+      });
+    }
+  }
+
+  formatDateForInput(date: any): string {
+    if (!date) return '';
+    const d = new Date(date);
+    const month = '' + (d.getMonth() + 1);
+    const day = '' + d.getDate();
+    const year = d.getFullYear();
+    return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+  }
+
+  get todayDateString(): string {
+    return this.formatDateForInput(new Date());
+  }
+
+  updateDueDate(event: any) {
+    const newDate = event.target.value;
+    const currentBook = this.book();
+    const currentUser = this.auth.currentUser();
+    
+    if (currentBook && currentUser && currentBook.borrowerId === currentUser.id && newDate) {
+      const d = new Date(newDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      d.setHours(0, 0, 0, 0);
+      
+      if (d < today) {
+        alert("Cannot set due date in the past");
+        event.target.value = this.formatDateForInput(currentBook.dueDate);
+        return;
+      }
+
+      this.bookService.extendBook(currentBook._id || currentBook.id, currentUser.id, newDate).subscribe({
+        next: (res) => this.book.set(res.book),
+        error: (err) => {
+          alert('Failed to update due date: ' + (err.error?.error || err.message));
+          event.target.value = this.formatDateForInput(currentBook.dueDate);
+        }
+      });
+    }
+  }
+
+  adjustDueDate(days: number) {
+    const currentBook = this.book();
+    const currentUser = this.auth.currentUser();
+    
+    if (currentBook && currentUser && currentBook.borrowerId === currentUser.id && currentBook.dueDate) {
+      const d = new Date(currentBook.dueDate);
+      d.setDate(d.getDate() + days);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const checkDate = new Date(d);
+      checkDate.setHours(0, 0, 0, 0);
+      
+      if (checkDate < today) {
+        alert("Cannot set due date in the past");
+        return;
+      }
+
+      const newDateStr = d.toISOString();
+      this.bookService.extendBook(currentBook._id || currentBook.id, currentUser.id, newDateStr).subscribe({
+        next: (res) => this.book.set(res.book),
+        error: (err) => alert('Failed to update due date: ' + (err.error?.error || err.message))
       });
     }
   }

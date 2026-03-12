@@ -42,9 +42,19 @@
         <div class="card-body">
             <h3 class="book-title">{{book.title | titlecase}}</h3>
             <p class="author-label">by <span class="author-name">{{book.author}}</span></p>
-            <p *ngIf="!book.available && book.dueDate" class="due-date-info">
-                <span class="due-label">Due:</span> {{book.dueDate | date:'mediumDate'}}
-            </p>
+            <div *ngIf="!book.available && book.dueDate" class="due-date-info">
+                <span class="due-label">Due:</span> 
+                <ng-container *ngIf="book.borrowerId === auth.currentUser()?.id; else readOnlyDate">
+                    <div class="due-date-editor">
+                        <button class="icon-btn" (click)="adjustDueDate(book, -1)" title="Decrease 1 Day">-</button>
+                        <input type="date" class="due-date-input" [min]="todayDateString" [value]="formatDateForInput(book.dueDate)" (change)="updateDueDate(book, $event)">
+                        <button class="icon-btn" (click)="adjustDueDate(book, 1)" title="Increase 1 Day">+</button>
+                    </div>
+                </ng-container>
+                <ng-template #readOnlyDate>
+                    {{book.dueDate | date:'mediumDate'}}
+                </ng-template>
+            </div>
         </div>
 
         <div class="card-footer">
@@ -70,6 +80,7 @@
                     <button *ngIf="!book.available && book.borrowerId === auth.currentUser()?.id" (click)="toggleStatus(book)" class="available-btn flex-grow" title="Return Book">
                         <span>📥</span> Return
                     </button>
+
                     
                     <!-- Wishlist actions for checked out books not borrowed by current user -->
                     <ng-container *ngIf="!book.available && book.borrowerId !== auth.currentUser()?.id">
