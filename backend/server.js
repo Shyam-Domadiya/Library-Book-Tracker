@@ -244,8 +244,30 @@ app.get('/api/books/overdue', async (req, res) => {
 });
 
 app.get('/api/books', async (req, res) => {
-    const books = await Book.find();
-    res.json(books);
+    try {
+        const { search, category, availability } = req.query;
+        const filter = {};
+
+        if (search) {
+            filter.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { author: { $regex: search, $options: 'i' } }
+            ];
+        }
+        if (category) {
+            filter.category = { $regex: `^${category}$`, $options: 'i' };
+        }
+        if (availability === 'available') {
+            filter.available = true;
+        } else if (availability === 'checkedout') {
+            filter.available = false;
+        }
+
+        const books = await Book.find(filter);
+        res.json(books);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch books' });
+    }
 });
 
 app.post('/api/books', async (req, res) => {
