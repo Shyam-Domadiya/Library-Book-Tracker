@@ -76,7 +76,7 @@ app.post('/api/transactions/issue', async (req, res) => {
 
         // Update book status
         const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + 14); // 14 days from now
+        dueDate.setDate(dueDate.getDate() + 7); // 7 days from now
 
         book.available = false;
         book.borrowerId = student._id;
@@ -147,6 +147,60 @@ app.post('/api/transactions/return', async (req, res) => {
         res.json({ message: 'Book returned successfully', book });
     } catch (err) {
         res.status(500).json({ error: 'Failed to return book' });
+    }
+});
+
+app.post('/api/transactions/extend', async (req, res) => {
+    try {
+        const { bookId, userId, newDueDate } = req.body;
+
+        const bookIdNum = Number(bookId);
+        const book = await Book.findOne({
+            $or: [
+                { id: isNaN(bookIdNum) ? -1 : bookIdNum },
+                ...(mongoose.Types.ObjectId.isValid(bookId) ? [{ _id: bookId }] : [])
+            ]
+        });
+
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+
+        if (book.available) {
+            return res.status(400).json({ error: 'Book is not currently borrowed' });
+        }
+
+        if (String(book.borrowerId) !== String(userId)) {
+            return res.status(403).json({ error: 'You can only extend books you have borrowed' });
+        }
+
+        let finalDueDate;
+        if (newDueDate) {
+            finalDueDate = new Date(newDueDate);
+        } else {
+            // Extend due date by 7 days from the *current* due date
+            finalDueDate = new Date(book.dueDate || new Date());
+            finalDueDate.setDate(finalDueDate.getDate() + 7);
+        }
+
+        book.dueDate = finalDueDate;
+        await book.save();
+
+        // Create transaction log
+        const transaction = new Transaction({
+            bookId: book.id,
+            bookTitle: book.title,
+            studentId: userId,
+            studentName: book.borrowerName,
+            type: 'EXTEND',
+            dueDate: finalDueDate
+        });
+        await transaction.save();
+
+        res.json({ message: 'Book extended successfully', book });
+    } catch (err) {
+        console.error('Extension Error:', err);
+        res.status(500).json({ error: 'Failed to extend book due date' });
     }
 });
 
