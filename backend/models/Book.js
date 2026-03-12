@@ -8,6 +8,7 @@ const bookSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
     borrowerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
     borrowerName: { type: String, default: null },
+    dueDate: { type: Date, default: null },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true, id: false });
 

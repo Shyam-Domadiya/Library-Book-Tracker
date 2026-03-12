@@ -115,6 +115,22 @@
     font-weight: 600;
 }
 
+.due-date-info {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: #f1f5f9;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.due-label {
+    font-weight: 700;
+    color: var(--primary);
+    margin-right: 0.25rem;
+}
+
 .card-footer {
     padding: 1.25rem;
     background: var(--background);
