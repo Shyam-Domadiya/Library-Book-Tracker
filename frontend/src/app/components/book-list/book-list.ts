@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book';
 import { AuthService } from '../../services/auth';
 import { Book } from '../../models/book';
+import { ModalService } from '../../services/modal';
 
 @Component({
   selector: 'app-book-list',
@@ -15,6 +16,7 @@ import { Book } from '../../models/book';
 })
 export class BookListComponent implements OnInit {
   auth = inject(AuthService);
+  modalService = inject(ModalService);
   searchTerm: string = '';
   selectedCategory: string = '';
   selectedAvailability: string = '';
@@ -54,14 +56,14 @@ export class BookListComponent implements OnInit {
       if (book.available) {
         if (!this.auth.isLibrarian()) {
           this.bookService.issueBook(book._id || book.id, currentUser.id).subscribe({
-            error: (err) => alert('Failed to borrow book: ' + (err.error?.error || err.message))
+            error: (err) => this.modalService.open('Error', 'Failed to borrow book: ' + (err.error?.error || err.message), 'error')
           });
         } else {
-          alert('Please view Book Details to issue a book to a specific student.');
+          this.modalService.open('Notice', 'Please view Book Details to issue a book to a specific student.', 'info');
         }
       } else {
         this.bookService.returnBook(book._id || book.id, currentUser.id, currentUser.role).subscribe({
-          error: (err) => alert('Failed to return book: ' + (err.error?.error || err.message))
+          error: (err) => this.modalService.open('Error', 'Failed to return book: ' + (err.error?.error || err.message), 'error')
         });
       }
     }
@@ -70,7 +72,7 @@ export class BookListComponent implements OnInit {
   deleteBook(id: number | string) {
     if (confirm('Are you sure you want to delete this book?')) {
       this.bookService.deleteBook(id).subscribe({
-        error: (err) => alert('Failed to delete book: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to delete book: ' + (err.error?.error || err.message), 'error')
       });
     }
   }
@@ -99,14 +101,14 @@ export class BookListComponent implements OnInit {
       d.setHours(0, 0, 0, 0);
       
       if (d < today) {
-        alert("Cannot set due date in the past");
+        this.modalService.open('Invalid Date', 'Cannot set due date in the past', 'error');
         event.target.value = this.formatDateForInput(book.dueDate);
         return;
       }
 
       this.bookService.extendBook(book._id || book.id, currentUser.id, newDate).subscribe({
         error: (err) => {
-          alert('Failed to update due date: ' + (err.error?.error || err.message));
+          this.modalService.open('Error', 'Failed to update due date: ' + (err.error?.error || err.message), 'error');
           event.target.value = this.formatDateForInput(book.dueDate);
         }
       });
@@ -125,13 +127,13 @@ export class BookListComponent implements OnInit {
       checkDate.setHours(0, 0, 0, 0);
       
       if (checkDate < today) {
-        alert("Cannot set due date in the past");
+        this.modalService.open('Invalid Date', 'Cannot set due date in the past', 'error');
         return;
       }
 
       const newDateStr = d.toISOString();
       this.bookService.extendBook(book._id || book.id, currentUser.id, newDateStr).subscribe({
-        error: (err) => alert('Failed to update due date: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to update due date: ' + (err.error?.error || err.message), 'error')
       });
     }
   }
@@ -140,7 +142,7 @@ export class BookListComponent implements OnInit {
     const currentUser = this.auth.currentUser();
     if (currentUser) {
       this.bookService.toggleWishlist(book._id || book.id, currentUser.id).subscribe({
-        error: (err) => alert('Failed to update wishlist: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to update wishlist: ' + (err.error?.error || err.message), 'error')
       });
     }
   }

@@ -4,6 +4,7 @@ import { NgIf } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { Role } from '../../models/user';
+import { ModalService } from '../../services/modal';
 
 @Component({
     selector: 'app-register',
@@ -19,7 +20,11 @@ export class RegisterComponent {
     selectedRole: Role = 'Student';
     errorMessage: string = '';
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(
+        private authService: AuthService, 
+        private router: Router,
+        private modalService: ModalService
+    ) { }
 
     onRegister() {
         if (this.username && this.password) {
@@ -30,7 +35,7 @@ export class RegisterComponent {
                 role: this.selectedRole
             }).subscribe({
                 next: () => {
-                    alert('Registration successful! Please login.');
+                    this.modalService.open('Success', 'Registration successful! Please login.', 'success');
                     this.router.navigate(['/login']);
                 },
                 error: (err) => {

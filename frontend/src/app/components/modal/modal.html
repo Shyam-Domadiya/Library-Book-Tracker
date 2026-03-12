@@ -1,0 +1,19 @@
+<div class="modal-backdrop" *ngIf="modalService.data() as data" (click)="modalService.close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header" [ngClass]="['header-' + data.type]">
+      <h2>
+        <ng-container *ngIf="data.type === 'error'">🚨 </ng-container>
+        <ng-container *ngIf="data.type === 'success'">✅ </ng-container>
+        <ng-container *ngIf="data.type === 'info'">ℹ️ </ng-container>
+        {{ data.title }}
+      </h2>
+      <button class="close-btn" (click)="modalService.close()">×</button>
+    </div>
+    <div class="modal-body">
+      <p>{{ data.message }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="primary" (click)="modalService.close()">OK</button>
+    </div>
+  </div>
+</div>

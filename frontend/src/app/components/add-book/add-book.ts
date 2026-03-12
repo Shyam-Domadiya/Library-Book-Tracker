@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from '../../services/book';
 import { Book } from '../../models/book';
+import { ModalService } from '../../services/modal';
 
 @Component({
   selector: 'app-add-book',
@@ -27,7 +28,8 @@ export class AddBook implements OnInit {
   constructor(
     private bookService: BookService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modalService: ModalService
   ) { }
 
   ngOnInit() {
@@ -49,19 +51,19 @@ export class AddBook implements OnInit {
     if (this.isEditMode && this.bookId !== null) {
       this.bookService.updateBook(this.bookId, this.book).subscribe({
         next: () => {
-          alert('Book updated successfully');
+          this.modalService.open('Success', 'Book updated successfully', 'success');
           this.router.navigate(['/books']);
         },
-        error: (err) => alert('Failed to update book: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to update book: ' + (err.error?.error || err.message), 'error')
       });
     } else {
       this.book.id = Date.now();
       this.bookService.addBook(this.book).subscribe({
         next: () => {
-          alert('Book added successfully');
+          this.modalService.open('Success', 'Book added successfully', 'success');
           this.router.navigate(['/books']);
         },
-        error: (err) => alert('Failed to add book: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to add book: ' + (err.error?.error || err.message), 'error')
       });
     }
   }

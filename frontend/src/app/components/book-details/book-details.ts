@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book';
 import { AuthService } from '../../services/auth';
 import { Book } from '../../models/book';
+import { ModalService } from '../../services/modal';
 
 @Component({
   selector: 'app-book-details',
@@ -15,6 +16,7 @@ import { Book } from '../../models/book';
 })
 export class BookDetails implements OnInit {
   auth = inject(AuthService);
+  modalService = inject(ModalService);
 
   // Use signals for reactive state — ensures change detection runs after async fetch
   book = signal<Book | null>(null);
@@ -53,7 +55,7 @@ export class BookDetails implements OnInit {
           this.book.set({ ...currentBook, available: false, borrowerName: student?.name });
           this.selectedStudentId = '';
         },
-        error: (err) => alert('Failed to issue book: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to issue book: ' + (err.error?.error || err.message), 'error')
       });
     }
   }
@@ -66,18 +68,18 @@ export class BookDetails implements OnInit {
         if (!this.auth.isLibrarian()) {
           this.bookService.issueBook(currentBook._id || currentBook.id, currentUser.id).subscribe({
             next: () => this.book.set({ ...currentBook, available: false, borrowerName: currentUser.name, borrowerId: currentUser.id }),
-            error: (err) => alert('Failed to borrow book: ' + (err.error?.error || err.message))
+            error: (err) => this.modalService.open('Error', 'Failed to borrow book: ' + (err.error?.error || err.message), 'error')
           });
         } else {
           this.bookService.updateBook(currentBook._id || currentBook.id, { ...currentBook, available: false }).subscribe({
             next: () => this.book.set({ ...currentBook, available: false }),
-            error: (err) => alert('Failed to update status: ' + (err.error?.error || err.message))
+            error: (err) => this.modalService.open('Error', 'Failed to update status: ' + (err.error?.error || err.message), 'error')
           });
         }
       } else {
         this.bookService.returnBook(currentBook._id || currentBook.id, currentUser.id, currentUser.role).subscribe({
           next: () => this.book.set({ ...currentBook, available: true, borrowerName: undefined, borrowerId: undefined }),
-          error: (err) => alert('Failed to return book: ' + (err.error?.error || err.message))
+          error: (err) => this.modalService.open('Error', 'Failed to return book: ' + (err.error?.error || err.message), 'error')
         });
       }
     }
@@ -88,7 +90,7 @@ export class BookDetails implements OnInit {
     if (currentBook && confirm('Are you sure you want to delete this book?')) {
       this.bookService.deleteBook(currentBook._id || currentBook.id).subscribe({
         next: () => this.router.navigate(['/books']),
-        error: (err) => alert('Failed to delete book: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to delete book: ' + (err.error?.error || err.message), 'error')
       });
     }
   }
@@ -118,7 +120,7 @@ export class BookDetails implements OnInit {
       d.setHours(0, 0, 0, 0);
       
       if (d < today) {
-        alert("Cannot set due date in the past");
+        this.modalService.open('Invalid Date', 'Cannot set due date in the past', 'error');
         event.target.value = this.formatDateForInput(currentBook.dueDate);
         return;
       }
@@ -126,7 +128,7 @@ export class BookDetails implements OnInit {
       this.bookService.extendBook(currentBook._id || currentBook.id, currentUser.id, newDate).subscribe({
         next: (res) => this.book.set(res.book),
         error: (err) => {
-          alert('Failed to update due date: ' + (err.error?.error || err.message));
+          this.modalService.open('Error', 'Failed to update due date: ' + (err.error?.error || err.message), 'error');
           event.target.value = this.formatDateForInput(currentBook.dueDate);
         }
       });
@@ -147,14 +149,14 @@ export class BookDetails implements OnInit {
       checkDate.setHours(0, 0, 0, 0);
       
       if (checkDate < today) {
-        alert("Cannot set due date in the past");
+        this.modalService.open('Invalid Date', 'Cannot set due date in the past', 'error');
         return;
       }
 
       const newDateStr = d.toISOString();
       this.bookService.extendBook(currentBook._id || currentBook.id, currentUser.id, newDateStr).subscribe({
         next: (res) => this.book.set(res.book),
-        error: (err) => alert('Failed to update due date: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to update due date: ' + (err.error?.error || err.message), 'error')
       });
     }
   }
@@ -168,7 +170,7 @@ export class BookDetails implements OnInit {
            // Update local book state with the new wishlist array
            this.book.set(res.book);
         },
-        error: (err) => alert('Failed to update wishlist: ' + (err.error?.error || err.message))
+        error: (err) => this.modalService.open('Error', 'Failed to update wishlist: ' + (err.error?.error || err.message), 'error')
       });
     }
   }
