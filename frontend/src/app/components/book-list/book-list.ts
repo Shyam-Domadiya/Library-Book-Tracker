@@ -5,8 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book';
 import { AuthService } from '../../services/auth';
 import { Book } from '../../models/book';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-book-list',
@@ -21,16 +19,12 @@ export class BookListComponent implements OnInit {
   selectedCategory: string = '';
   selectedAvailability: string = '';
   categories: string[] = ['Programming', 'Fiction', 'History', 'Science', 'Biography'];
-  private searchSubject = new Subject<void>();
+  private searchTimer: any = null;
 
   constructor(private bookService: BookService) { }
 
   ngOnInit() {
     this.fetchBooks();
-    this.searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(() => this.fetchBooks());
   }
 
   fetchBooks() {
@@ -41,8 +35,13 @@ export class BookListComponent implements OnInit {
     }).subscribe();
   }
 
-  onFilterChange() {
-    this.searchSubject.next();
+  onSearchChange() {
+    clearTimeout(this.searchTimer);
+    this.searchTimer = setTimeout(() => this.fetchBooks(), 300);
+  }
+
+  onDropdownChange() {
+    this.fetchBooks();
   }
 
   get filteredBooks(): Book[] {
