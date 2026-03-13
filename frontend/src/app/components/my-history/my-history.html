@@ -1,0 +1,60 @@
+<div class="history-container animate-fade-in">
+    <div class="glass card">
+        <div class="header-section">
+            <h2 class="text-gradient">My Borrowing History</h2>
+            <p class="subtitle">A complete log of books you have borrowed and returned.</p>
+        </div>
+
+        <div class="table-container">
+            <table class="table" *ngIf="transactions$ | async as transactions; else loading">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Type</th>
+                        <th>Transaction Date</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let t of transactions">
+                        <td>
+                            <div class="book-info">
+                                <span class="badge badge-primary">#{{t.bookId}}</span>
+                                <span class="book-title">{{t.bookTitle}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="type-badge" [ngClass]="{
+                                'issue-badge': t.type === 'ISSUE', 
+                                'return-badge': t.type === 'RETURN',
+                                'extend-badge': t.type === 'EXTEND'
+                            }">
+                                {{t.type}}
+                            </span>
+                        </td>
+                        <td>{{(t.createdAt || t.date) | date:'medium'}}</td>
+                        <td>
+                            <span *ngIf="t.dueDate; else na" class="due-date">
+                                {{t.dueDate | date:'mediumDate'}}
+                            </span>
+                            <ng-template #na>
+                                <span class="text-muted">-</span>
+                            </ng-template>
+                        </td>
+                    </tr>
+                    <tr *ngIf="transactions.length === 0">
+                        <td colspan="4" class="empty-state">
+                            You have no borrowing history yet.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ng-template #loading>
+                <div class="loading-state">
+                    Loading your history...
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

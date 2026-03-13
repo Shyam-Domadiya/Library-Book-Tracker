@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Book } from '../models/book';
 import { Transaction } from '../models/transaction';
 import { Observable, catchError, tap, throwError } from 'rxjs';
@@ -130,8 +130,12 @@ export class BookService {
     );
   }
 
-  getTransactions(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>('http://localhost:5000/api/transactions').pipe(
+  getTransactions(studentId?: string): Observable<Transaction[]> {
+    let params = new HttpParams();
+    if (studentId) {
+      params = params.set('studentId', studentId);
+    }
+    return this.http.get<Transaction[]>('http://localhost:5000/api/transactions', { params }).pipe(
       catchError(err => {
         console.error('Failed to fetch transactions:', err);
         return throwError(() => err);

@@ -248,7 +248,9 @@ app.post('/api/books/:id/wishlist', async (req, res) => {
 
 app.get('/api/transactions', async (req, res) => {
     try {
-        const transactions = await Transaction.find().sort({ createdAt: -1 });
+        const { studentId } = req.query;
+        const filter = studentId ? { studentId } : {};
+        const transactions = await Transaction.find(filter).sort({ createdAt: -1 });
         res.json(transactions);
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch transactions' });

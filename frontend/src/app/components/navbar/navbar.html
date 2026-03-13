@@ -11,7 +11,7 @@
             <a routerLink="/home" routerLinkActive="active" class="hover-underline">Home</a>
             <a routerLink="/books" routerLinkActive="active" class="hover-underline">Books</a>
             <a *ngIf="auth.isLibrarian()" routerLink="/add-book" routerLinkActive="active" class="hover-underline">Add Book</a>
-            <a *ngIf="auth.isLibrarian()" routerLink="/history" routerLinkActive="active" class="hover-underline">History</a>
+            <a *ngIf="!auth.isLibrarian()" routerLink="/my-history" routerLinkActive="active" class="hover-underline">My History</a>
             <a *ngIf="!auth.isLibrarian()" routerLink="/wishlist" routerLinkActive="active" class="hover-underline">Wishlist</a>
         </div>
 

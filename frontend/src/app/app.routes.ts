@@ -7,7 +7,7 @@ import { BookDetails } from './components/book-details/book-details';
 import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
 import { WishlistComponent } from './components/wishlist/wishlist';
-import { HistoryComponent } from './components/history/history';
+import { MyHistoryComponent } from './components/my-history/my-history';
 import { authGuard } from './guards/auth';
 import { guestGuard } from './guards/guest';
 
@@ -31,10 +31,10 @@ export const routes: Routes = [
     { path: 'book/:id', component: BookDetails, canActivate: [authGuard] },
     { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard] },
     {
-        path: 'history',
-        component: HistoryComponent,
+        path: 'my-history',
+        component: MyHistoryComponent,
         canActivate: [authGuard],
-        data: { role: 'Librarian' }
+        data: { role: 'Student' }
     },
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];

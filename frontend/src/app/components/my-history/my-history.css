@@ -1,0 +1,82 @@
+.history-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-section {
+    margin-bottom: 2rem;
+}
+
+.subtitle {
+    color: var(--text-light);
+    margin-top: 0.5rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.book-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.book-title {
+    font-weight: 500;
+}
+
+.type-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.issue-badge {
+    background: rgba(var(--warning-rgb), 0.1);
+    color: var(--warning);
+}
+
+.return-badge {
+    background: rgba(var(--success-rgb), 0.1);
+    color: var(--success);
+}
+
+.extend-badge {
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary);
+}
+
+.loading-state, .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-light);
+}
+
+.text-muted {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.due-date {
+    color: var(--text-light);
+}

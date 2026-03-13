@@ -4,7 +4,7 @@ export interface Transaction {
     bookTitle: string;
     studentId: string;
     studentName: string;
-    type: 'ISSUE' | 'RETURN';
+    type: 'ISSUE' | 'RETURN' | 'EXTEND';
     dueDate?: string;
     date: string;
     createdAt?: string;
